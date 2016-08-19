@@ -1,3 +1,13 @@
+Mangna Carta
+
+
+
+Questions:
+* Can you imagine beiong able to choose your line manager, or not even having one
+* Can you remember choosing what youwork on, rather than being told?
+
+Valve Operating Mode. Link
+
 Organisations are not all the same; but most are quite similar.
 There are some near constants like hierarchy, often but not always with grades
 The one we recognise has a lot to do with Max Weber, and Taylor
