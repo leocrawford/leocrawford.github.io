@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Musings in an Etherial World
+title: Recursive Ramblings
 email: your-email@domain.com
 description: > # Exploring technology and the institutions that create
    it, one blog at a time

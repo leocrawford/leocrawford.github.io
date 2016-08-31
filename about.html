@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Venn Diagram - pack layout</title>
+    <script src="js/d3.v3.min.js"></script>
+    <!-- <script src="https://raw.githubusercontent.com/christophe-g/vennLayout/master/vennLayout.js"></script> -->
+    <!-- <script type="text/javascript" src="../d3.js"></script> -->
+    <script type="text/javascript" src="js/d3-venn.js"></script>
+    <style>
+        #venn {
+            margin-left: 250px;
+            margin-top: 0px;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 60px;
+            height: 28px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <svg id="venn"></svg>
+    <script type="text/javascript">
+        var width = 600,
+            height = 600,
+            colors = d3.scale.category10();
+
+        var setChar = 'ABCDEFGHIJKLMN',
+            charFn = i => setChar[i],
+            setLength = 4,
+            sets = d3.range(setLength).map(function(d, i) {
+                return setChar[i]
+            })
+
+            var data = [
+                {"set":["A"],"name":"node_0"},
+                      {"set":["A"],"name":"node_0a"},
+                {"set":["B"],"name":"node_1"},
+                  {"set":["B"],"name":"node_1b"},
+                {"set":["B","A"],"name":"node_2"},
+                {"set":["B","A"],"name":"node_3"}
+                ]
+
+  /*      var data = [{
+                "set": ["A"],
+                "name": "billshare.com"
+            }, {
+                "set": ["B"],
+                "name": "Head of Software Engineering for Large Government Department"
+            }, {
+                "set": ["C"],
+                "name": "NFM"
+            }, {
+                "set": ["A", "B","C"],
+                "name": "iPhoneAnalyzer"
+
+            }
+            , {
+                "set": ["A"],
+                "name": "Established N...."
+            }, {
+                "set": ["Rightshifting"],
+                "name": "CMMI"
+            }
+            , {
+                                "set": ["Rightshifting","Software Engineer"],
+                                "name": "RUP"
+                            }, {
+                                "set": ["Rightshifting","Software Engineer"],
+                                "name": "Agile"
+                            }, {
+                                "set": ["Rightshifting"],
+                                "name": "Utility Cloud (IaaS)"
+                            }, {
+                                "set": ["Rightshifting"],
+                                "name": "Corporate Social Networking"
+                            }, {
+                                "set": ["Software Engineer"],
+                                "name": "Corporate Development Envionment"
+                            }, {
+                                "set": ["Software Engineer","Speaker"],
+                                "name": "Speaker and Debater at \"Agile At Scale\""
+                            }, {
+                                "set": ["Software Engineer","Trainer"],
+                                "name": "Taught Agile Delivery"
+                            }
+                          ] */
+
+
+
+
+
+
+        var l = d3.layout.venn()
+            .size([width, height])
+            .padding(0)
+            .packingStragegy(d3.layout.venn.force),
+            // l = d3.layout.venn().size([width, height]),
+
+            ld = l.nodes(data);
+
+        var svg = d3.select('svg')
+            .attr('width', width)
+            .attr('height', height);
+
+        var nodes = svg.selectAll("g")
+            .data(l.sets().values(), function(d) {
+                return d.__key__;
+            });
+
+        // Define the div for the tooltip
+        var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        var venn = nodes.enter()
+            .append('g')
+            .attr("class", function(d) {
+                return "venn-area venn-" +
+                    (d.sets.length == 1 ? "circle" : "intersection");
+            })
+            .attr('fill', function(d, i) {
+                return colors(i)
+            })
+
+
+        venn.append("path")
+            .attr('d', function(d, i) {
+                return d.d(1)
+            })
+            // .attr('fill', function(d,i) {return colors(i)} )
+            .attr('opacity', 0.25)
+
+        venn.append("text")
+            .attr("class", "label")
+            .text(function(d) {
+                return d.__key__;
+            })
+            .attr("text-anchor", "middle")
+            .attr("dy", ".35em")
+            .attr("x", function(d) {
+                return d.center.x
+            })
+            .attr("y", function(d) {
+                return d.center.y
+            });
+
+        var points = venn.selectAll("circle.node")
+            .data(function(d) {
+                return d.nodes
+            })
+            .enter()
+
+        points.append('circle')
+            .attr('class', 'node')
+            .attr("cx", function(d) {
+                return d.x
+            })
+            .attr("cy", function(d) {
+                return d.y
+            })
+            .attr('r', 3)
+
+
+
+
+        venn.append('circle')
+            .attr('class', 'inner')
+            .attr('fill', 'grey')
+            .attr('opacity', 0.2)
+            .attr("cx", function(d) {
+                return d.center.x
+            })
+            .attr("cy", function(d) {
+                return d.center.y
+            })
+            .attr('r', function(d) {
+                return d.innerRadius
+            })
+            .on("mouseover", function(d) {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html(d.nodes.length > 0 ? d.nodes[0].name : "Empty")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+    </script>
+</body>
+
+</html>

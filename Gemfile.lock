@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     colorator (1.1.0)
+    ffi (1.9.10)
     forwardable-extended (2.6.0)
     jekyll (3.2.1)
       colorator (~> 1.0)
@@ -13,10 +14,12 @@ GEM
       pathutil (~> 0.9)
       rouge (~> 1.7)
       safe_yaml (~> 1.0)
+    jekyll-paginate (1.1.0)
     jekyll-sass-converter (1.4.0)
       sass (~> 3.4)
     jekyll-watch (1.5.0)
       listen (~> 3.0, < 3.1)
+    json (1.8.3)
     kramdown (1.11.1)
     liquid (3.0.6)
     listen (3.0.6)
@@ -24,6 +27,8 @@ GEM
     minima (1.0.1)
     pathutil (0.14.0)
       forwardable-extended (~> 2.6)
+    rb-inotify (0.9.7)
+      ffi (>= 0.5.0)
     rouge (1.11.1)
     safe_yaml (1.0.4)
     sass (3.4.22)
@@ -33,7 +38,10 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll (= 3.2.1)
+  jekyll-paginate
+  json
   minima
+  rb-inotify
 
 BUNDLED WITH
    1.10.6
