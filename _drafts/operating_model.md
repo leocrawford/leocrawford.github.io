@@ -19,19 +19,22 @@ and (#dontmentionbrexit) provided for freedom of travel and freedom of trade:
 
 > It shall be lawful in future for any one, keeping loyalty to the Crown, to leave our kingdom and to return safely and securely, by land and by water. This is except in time of war, when men may go, only in the public interest, for some short period. (This excludes, always, those imprisoned or outlawed in accordance with the law of the realm, natives of any country at war with us, and merchants, who shall be treated as previously stated).
 
-Whilst the Magna Carta has had a fairly rocky 800 year history; being anulled within months of being issued, and many of the clauses being removed or softened over time it has not only shaped our liberal democracy, but (arguably) more importantly has started a shift from Customary Law to written Statutory Law with prescribed mechanisms for judgement and enforcement.  
+Whilst the Magna Carta has had a fairly rocky 800 year history; being annulled within months of being issued, and many of the clauses being removed or softened over time it has not only shaped our liberal democracy, but (arguably) more importantly has started a shift from Customary Law to written Statutory Law with prescribed mechanisms for judgement and enforcement.  
 
 In other words, it was a short document that transformed the governance of the country, or in the words of the Magna Carta itself initiated a "reform of our realm"
 
 > ...and the advancement of the holy Church, and for the **reform of our realm**, by advice of our venerable fathers...
 
-It's hard to think of a written document changing a whole way of living, but the Magna Carta is by far not the only example. Indeed, preceeding it by nine years the The Yasak of Genghis Khan set out some simple rules (and punishments) of the land, enshrined freedom of religion, and set out rules for his successor to be appointed - all despite being illeterate himself.
+It's hard to think of a written document changing a whole way of living, but the Magna Carta is by far not the only example. Indeed, preceding it by nine years the The Yasak of Genghis Khan set out some simple rules (and punishments) of the land, enshrined freedom of religion, and set out rules for his successor to be appointed - all despite being illiterate himself.
 
 ![genghis kahn picture](/assets/operating_model/genghis_kahn.jpg){:height="200px"  align="right"}
 
 The impact was immense:
 
 > "Petty wars and the sudden, ferocious raids of neighbors disappeared. Banditry almost vanished. The ordinary tribesman, travelling across those endless pastures with his tent, his wagon, his family and his flocks, a new peace now brought him comfort." [Peter Brent, Genghis Khan]
+
+Modern institutions may not have banditry, but petty wars (albeit of words) and  
+
 
 ![scientific management](/assets/operating_model/scientific_management.jpg){:height="200px"  align="right"}
 ![max weber](/assets/operating_model/max_weber.jpg){:height="200px"  align="left"}
@@ -64,6 +67,14 @@ Questions:
 
 Valve Operating Mode. Link
 
+We had an Operating Model that worked, but in order to become more agile we started breaking it. Change control. Review and approvals.
+
+Meta Governance.
+
+https://medium.com/@jurgenappelo/no-agile-does-not-scale-98df99da3ff3#.4lhklfpcu
+* "System laws suggest that shared rules (processes and tools) are crucial for the emergence of creative patterns at a larger scale. The question is, “Where do these rules come from?” Top-down processes and tools as imposed constraints are usually not agile, while emerging patterns of structured collaboration usually are. From a systems perspective, agility means bottom-up rules over top-down constraints."
+
+
 Organisations are not all the same; but most are quite similar.
 There are some near constants like hierarchy, often but not always with grades
 The one we recognise has a lot to do with Max Weber, and Taylor
@@ -75,6 +86,7 @@ Options around:
 * Prioritisation
 * Flow of work
 * Conflict resolution
+* Structure (but just one item)
 *
 represented in rules, norms, culture, etc.
 
