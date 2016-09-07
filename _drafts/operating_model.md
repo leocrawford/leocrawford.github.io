@@ -7,7 +7,7 @@ title:  " Operating Model: The Magna Carta for Organisations?"
 
 # Operating Model: The Magna Carta for Organisations?
 
-![magna carta picture](/assets/operating_model/magna_carta.jpg)
+![magna carta picture](/assets/operating_model/magna_carta.jpg){:width="100%"}
 
 You've no doubt heard of the Mangna Carta (1215). It established the principle that the king was subject to and not above the law, enshrined the right of fair trial in law, standardised weights and measures..
 
@@ -25,44 +25,55 @@ In other words, it was a short document that transformed the governance of the c
 
 > ...and the advancement of the holy Church, and for the **reform of our realm**, by advice of our venerable fathers...
 
-It's hard to think of a written document changing a whole way of living, but the Magna Carta is by far not the only example. Indeed, preceding it by nine years the The Yasak of Genghis Khan set out some simple rules (and punishments) of the land, enshrined freedom of religion, and set out rules for his successor to be appointed - all despite being illiterate himself.
+![genghis kahn picture](/assets/operating_model/genghis_kahn.jpg){:style="float:right;clear:both;padding-bottom:10px;padding-left:10px;width:250px;"}
 
-![genghis kahn picture](/assets/operating_model/genghis_kahn.jpg){:height="200px"  align="right"}
+It's hard to think of a written document changing a whole way of living, but the Magna Carta is by far not the only example. Indeed, preceding it by nine years the The Yasak of Genghis Khan set out some simple rules (and punishments) of the land, enshrined freedom of religion, and set out rules for his successor to be appointed - all despite being illiterate himself.
 
 The impact was immense:
 
 > "Petty wars and the sudden, ferocious raids of neighbors disappeared. Banditry almost vanished. The ordinary tribesman, travelling across those endless pastures with his tent, his wagon, his family and his flocks, a new peace now brought him comfort." [Peter Brent, Genghis Khan]
 
+![MacLeod’s Archetypes](http://206hwf3fj4w52u3br03fi242.wpengine.netdna-cdn.com/wp-content/uploads/2009/10/hughMcLeodCompanyHierarchy.jpg){:style="float:right;clear:both;padding-bottom:10px;padding-left:10px;width:250px;"}
 
-Most organisations today are operating much like countries did before the Magna Carta (and the Yasak). The freedoms and responsibilities of individuals are passed down from one generation to the next, not shaped to solve the problems of the day.
+Most organisations today may not have banditry, but are operating much like countries did before the Magna Carta (and the Yasak); the freedoms and responsibilities of individuals are passed down from one generation to the next, not shaped to solve the problems of the day, creating a competitive and political environment which serves neither the people who work in them, or those the organisation is meant to serve. Instead they often end up looking like MacLeod's Archetypes.
 
-Modern institutions may not have banditry, but petty wars (albeit of words) and  
+<div style="clear:both;"/>
 
+Instead we are blessed with an Operating Model (because that is the name we give to these ways of workings) that is based on ideas from over a century ago, and is shared not as a document (which can be challenged and updated) but is transmitted culturally.
 
-![scientific management](/assets/operating_model/scientific_management.jpg){:height="200px"  align="right"}
-![max weber](/assets/operating_model/max_weber.jpg){:height="200px"  align="left"}
+I order to understand the organisations of today, it is worth understanding the key influences that made them the way they are - and which are unconsciously culturally transmitted (infected) from one generation to the next. Meet Frederick Taylor's "Principles of Scientific Management" and Max Weber's work on Bureaucracy:
+
+Taylor advocated:
+
+![scientific management](/assets/operating_model/scientific_management.jpg){:style="float:right;clear:both;padding-bottom:10px;padding-left:10px;width:150px;"}
+
 
 > 1. Replace working by "rule of thumb," or simple habit and common sense, and instead use the scientific method to study work and determine the most efficient way to perform specific tasks.
 1. Rather than simply assign workers to just any job, match workers to their jobs based on capability and motivation, and train them to work at maximum efficiency.
 1. Monitor worker performance, and provide instructions and supervision to ensure that they're using the most efficient ways of working.
 1. Allocate the work between managers and workers so that the managers spend their time planning and training, allowing the workers to perform their tasks efficiently.
 
+and Weber:
+
+![max weber](/assets/operating_model/max_weber.jpg){:style="float:right;clear:both;padding-bottom:10px;padding-left:10px;width:300px;"}
+
+> Bureaucracies are organized according to rational principles. Offices are ranked in a hierarchical order and their operations are characterized by impersonal rules. Incumbents are governed by methodical allocation of areas of jurisdiction and delimited spheres of duty. Appointments are made according to specialized qualifications rather than ascriptive criteria.[^weber]
+
+[^weber]: Source: Boundless. “Weber's Model for Bureaucracy.” Boundless Sociology. Boundless, 08 Aug. 2016. Retrieved 31 Aug. 2016 from https://www.boundless.com/sociology/textbooks/boundless-sociology-textbook/social-groups-and-organization-6/bureaucracy-56/weber-s-model-for-bureaucracy-352-10202/
+
+Yet Weber also noted the dysfunctions of bureaucracy. Its major advantage, the calculability of results, also makes it unwieldy and even stultifying in dealing with individual cases.
+
+Weber's ideal bureaucracy is characterized by the following:
+
+1. Hierarchical organization
+1. Delineated lines of authority with fixed areas of activity
+1. Action taken on the basis of, and recorded in, written rules
+1. Bureaucratic officials with expert training
+1. Rules implemented by neutral officials, and
+1. Career advancement depending on technical qualifications judged by organization, not individuals
 
 
-> Bureaucracies are organized according to rational principles. Offices are ranked in a hierarchical order and their operations are characterized by impersonal rules. Incumbents are governed by methodical allocation of areas of jurisdiction and delimited spheres of duty. Appointments are made according to specialized qualifications rather than ascriptive criteria. This bureaucratic coordination of the actions of large numbers of people has become the dominant structural feature of modern forms of organization. Only through this organizational device has large- scale planning, both for the modern state and the modern economy, become possible. Only through it could heads of state mobilize and centralize resources of political power, which in feudal times, for example, had been dispersed in a variety of centers. Only with its aid could economic resources be mobilized, which lay fallow in pre-modern times. Bureaucratic organization is to Weber the privileged instrumentality that has shaped the modern polity, the modern economy, the modern technology. Bureaucratic types of organization are technically superior to all other forms of administration, much as machine production is superior to handicraft methods.
 
-> Yet Weber also noted the dysfunctions of bureaucracy. Its major advantage, the calculability of results, also makes it unwieldy and even stultifying in dealing with individual cases.
-
-> Weber's ideal bureaucracy is characterized by the following:
-1. hierarchical organization
-1. delineated lines of authority with fixed areas of activity
-1. action taken on the basis of, and recorded in, written rules
-1. bureaucratic officials with expert training
-1. rules implemented by neutral officials
-1. and career advancement depending on technical qualifications judged by organization, not individuals
-
-
-Source: Boundless. “Weber's Model for Bureaucracy.” Boundless Sociology. Boundless, 08 Aug. 2016. Retrieved 31 Aug. 2016 from https://www.boundless.com/sociology/textbooks/boundless-sociology-textbook/social-groups-and-organization-6/bureaucracy-56/weber-s-model-for-bureaucracy-352-10202/
 
 Questions:
 * Can you imagine beiong able to choose your line manager, or not even having one
