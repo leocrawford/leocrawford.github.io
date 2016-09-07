@@ -33,6 +33,8 @@ The impact was immense:
 
 > "Petty wars and the sudden, ferocious raids of neighbors disappeared. Banditry almost vanished. The ordinary tribesman, travelling across those endless pastures with his tent, his wagon, his family and his flocks, a new peace now brought him comfort." [Peter Brent, Genghis Khan]
 
+Most organisations today are operating much like countries did before the Magna Carta (and the Yasak). The freedoms and responsibilities of individuals are passed down from one generation to the next, not shaped to solve the problems of the day. 
+
 ![scientific management](/assets/operating_model/scientific_management.jpg){:height="200px"  align="right"}
 ![max weber](/assets/operating_model/max_weber.jpg){:height="200px"  align="left"}
 
