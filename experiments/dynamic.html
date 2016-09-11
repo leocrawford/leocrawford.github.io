@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Dynamic venn.js example</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="float:left;padding:20px">
+        <table>
+            <tr>
+                <td>|A|</td>
+                <td>
+                    <input class="input-mini venn_area" id="A" type="number" value="16">
+                </td>
+            </tr>
+            <tr>
+                <td>|B|</td>
+                <td>
+                    <input class="input-mini venn_area" id="B" type="number" value="16">
+                </td>
+            </tr>
+            <tr>
+                <td>|C|</td>
+                <td>
+                    <input class="input-mini venn_area" id="C" type="number" value="12">
+                </td>
+            </tr>
+            <tr>
+                <td>|A&#8745B|</td>
+                <td>
+                    <input class="input-mini venn_area" id="A,B" type="number" value="4">
+                </td>
+            </tr>
+            <tr>
+                <td>|A&#8745C|</td>
+                <td>
+                    <input class="input-mini venn_area" id="A,C" type="number" value="4">
+                </td>
+            </tr>
+            <tr>
+                <td>|B&#8745C|</td>
+                <td>
+                    <input class="input-mini venn_area" id="B,C" type="number" value="3">
+                </td>
+            </tr>
+            <tr>
+                <td>|A&#8745B&#8745C|&nbsp</td>
+                <td>
+                    <input class="input-mini venn_area" id="A,B,C" type="number" value="2">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="venn"></div>
+    <div style="clear: both;"></div>
+
+</body>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-hierarchy.v1.min.js"></script>
+<script src="venn.js"></script>
+<script>
+    var issue = 0;
+
+    function getSetIntersections() {
+        issue++;
+        areas = d3.selectAll(".venn_area").nodes().map(
+            function(element) {
+                var size = parseFloat(element.value);
+                return {
+                    sets: element.id.split(","),
+                    size: size,
+                    children: fillArrayWithLetters(size, element.id.replace(/\,/g, ""))
+                };
+
+            });
+        return areas;
+    }
+
+    function fillArrayWithLetters(n, prefix) {
+        var arr = Array.apply(null, Array(n));
+        return arr.map(function(x, i) {
+            return {
+                name: prefix + i,
+                time: new Date().getTime()
+            }
+        });
+    }
+
+
+    // draw the initial set
+    var chart = venn.VennDiagram()
+        .width(600)
+        .height(500);
+
+
+    var simulation;
+    //      .force("center", d3.forceCenter(200, 200));
+
+    /*    var simulation = d3.forceSimulation()
+            .force("charge", d3.forceManyBody())
+            .force("x", d3.forceX())
+            .force("y", d3.forceY());
+    */
+
+    d3.select("#venn").datum(getSetIntersections()).call(chart);
+    var svg = d3.select("svg");
+    update();
+    // redraw the sets on any change in input
+    d3.selectAll("input").on("change", function() {
+        d3.select("#venn").datum(getSetIntersections()).call(chart).call(update);
+    });
+
+
+
+    // tweak style
+    var colours = ['black', 'red', 'blue'];
+    d3.selectAll("#venn .venn-circle path")
+        .style("fill-opacity", 0)
+        .style("stroke-width", 10)
+        .style("stroke-opacity", .5)
+        .style("stroke", function(d, i) {
+            return colours[i];
+        });
+
+
+    d3.selectAll("#venn .venn-circle").selectAll("text")
+        .style("fill", function(d, i) {
+            return colours[i]
+        })
+        .style("font-size", "32px")
+        .style("font-weight", "100");
+
+
+    function dragstarted(d) {
+        if (!d3.event.active) {
+            simulation.alphaTarget(0.3).restart();
+        }
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        // console.log(d);
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+
+    function update() {
+
+        var nodes = addPoints();
+
+        if (simulation != null)
+            simulation.stop();
+        simulation = d3.forceSimulation()
+            //      .force("charge", d3.forceManyBody().strength(50))
+            .force("collide", d3.forceCollide(8))
+            .force("x", d3.forceX(function x(node) {
+                if (isNaN(node.px)) return 100;
+                else
+                    return node.px;
+            }))
+            .force("y", d3.forceY(function y(node) {
+                if (isNaN(node.py)) return 100;
+                return node.py;
+            }));
+
+        console.log(nodes);
+
+
+
+        //  console.log(nodes[0]);
+
+        simulation
+            .nodes(nodes)
+            .on("tick", ticked)
+            // .restart();
+
+        function ticked() {
+            console.log("ticked: ");
+            // console.log(node);
+            svg.selectAll(".point")
+                .attr("cx", function(d) {
+                    // console.log("setting cx: " + JSON.stringify(d));
+                    return d.x;
+                })
+                .attr("cy", function(d) {
+                    return d.y;
+                });
+        }
+
+
+
+        function bbox(t) {
+            return t.parentNode.childNodes[0].getBBox();
+        }
+
+    }
+
+    function addPoints() {
+        var nodes = [];
+
+        var datapoints = d3.selectAll("#venn .venn-circle").selectAll(".point")
+            .data(function(d, i) {
+                var x = (d == null || d.children == null) ? [] : d.children;
+                pushArray(nodes, x);
+                return x;
+            }, function(d) {
+                return d.name;
+            });
+
+        console.log("enter and exit");
+        console.log(datapoints._enter[0]);
+        console.log(datapoints._exit[0]);
+
+        // lets copy the current x and y value back from object to data so that
+        // the simulation carries on rather than restarting
+        datapoints.each(function(d, i) {
+            d.x = this.cx.animVal.value;
+            d.y = this.cy.animVal.value;
+        });
+
+        var node = datapoints.enter()
+            .append("circle")
+            .attr("class", "point")
+            .attr("r", 8)
+            .each(function(d) {
+                var bb = this.parentElement.firstChild.getBBox();
+                d.px = bb.x + bb.width / 2;
+            })
+            .each(function(d) {
+                var bb = this.parentElement.firstChild.getBBox();
+                d.py = bb.y + bb.height / 2;
+            })
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        datapoints.each(function(d) {
+                var bb = this.parentElement.firstChild.getBBox();
+                d.px = bb.x + bb.width / 2;
+            })
+            .each(function(d) {
+                var bb = this.parentElement.firstChild.getBBox();
+                d.py = bb.y + bb.height / 2;
+            })
+
+        datapoints.exit().remove();
+        return nodes;
+    }
+
+    function pushArray(arr, arr2) {
+        arr.push.apply(arr, arr2);
+    }
+</script>
+
+</html>
