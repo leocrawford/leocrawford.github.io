@@ -1,5 +1,4 @@
-Ethereal Architect
-Cat /dev/mind | /dev/blog
+Scrapheap Architect
 
 
 Exploring technology and the institutions that produce it
@@ -43,4 +42,3 @@ o	iPhone Analyzer
 o	BillShare
 o	Graph Databases
 o	Direct Viz and Editing of Data, Models
-

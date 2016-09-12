@@ -63,14 +63,11 @@
     <div style="clear: both;"></div>
 
 </body>
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="https://d3js.org/d3-hierarchy.v1.min.js"></script>
+<script src="../js/d3.v4.min.js"></script>
+<!-- <script src="https://d3js.org/d3-hierarchy.v1.min.js"></script> -->
 <script src="venn.js"></script>
 <script>
-    var issue = 0;
-
     function getSetIntersections() {
-        issue++;
         areas = d3.selectAll(".venn_area").nodes().map(
             function(element) {
                 var size = parseFloat(element.value);
@@ -89,7 +86,6 @@
         return arr.map(function(x, i) {
             return {
                 name: prefix + i,
-                time: new Date().getTime()
             }
         });
     }
@@ -100,15 +96,48 @@
         .width(600)
         .height(500);
 
+        function ticked() {
+              svg.selectAll(".point")
+                .attr("cx", function(d) {
+                      return d.x;
+                })
+                .attr("cy", function(d) {
+                    return d.y;
+                });
+        }
 
-    var simulation;
-    //      .force("center", d3.forceCenter(200, 200));
+    var simulation  = d3.forceSimulation()
+            //      .force("charge", d3.forceManyBody().strength(50))
+            .force("collide", d3.forceCollide(8))
+            .force("x", d3.forceX(function x(node) {
+                    return node.px;
+            }))
+            .force("y", d3.forceY(function y(node) {
+                return node.py;
+            }))
+            .force("constrain",constrain())
+            .on("tick", ticked)
+          ;
 
-    /*    var simulation = d3.forceSimulation()
-            .force("charge", d3.forceManyBody())
-            .force("x", d3.forceX())
-            .force("y", d3.forceY());
-    */
+
+      function constrain() {
+        var nodes;
+       function force(alpha) {
+      // console.log("constrain");}
+console.log(nodes.length);
+      for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
+        node = nodes[i];
+        console.log(node);
+        node.vx = 0;
+        node.x = 0;
+      }}
+
+      force.initialize = function(_) {
+        nodes = _;
+    }
+    return force;
+  }
+
 
     d3.select("#venn").datum(getSetIntersections()).call(chart);
     var svg = d3.select("svg");
@@ -161,54 +190,9 @@
 
 
     function update() {
-
-        var nodes = addPoints();
-
-        if (simulation != null)
-            simulation.stop();
-        simulation = d3.forceSimulation()
-            //      .force("charge", d3.forceManyBody().strength(50))
-            .force("collide", d3.forceCollide(8))
-            .force("x", d3.forceX(function x(node) {
-                if (isNaN(node.px)) return 100;
-                else
-                    return node.px;
-            }))
-            .force("y", d3.forceY(function y(node) {
-                if (isNaN(node.py)) return 100;
-                return node.py;
-            }));
-
-        console.log(nodes);
-
-
-
-        //  console.log(nodes[0]);
-
         simulation
-            .nodes(nodes)
-            .on("tick", ticked)
-            // .restart();
-
-        function ticked() {
-            console.log("ticked: ");
-            // console.log(node);
-            svg.selectAll(".point")
-                .attr("cx", function(d) {
-                    // console.log("setting cx: " + JSON.stringify(d));
-                    return d.x;
-                })
-                .attr("cy", function(d) {
-                    return d.y;
-                });
-        }
-
-
-
-        function bbox(t) {
-            return t.parentNode.childNodes[0].getBBox();
-        }
-
+            .nodes(addPoints())
+            .alpha(1)
     }
 
     function addPoints() {
@@ -252,16 +236,20 @@
                 .on("end", dragended));
 
         datapoints.each(function(d) {
-                var bb = this.parentElement.firstChild.getBBox();
+                var bb = bbox(this);
                 d.px = bb.x + bb.width / 2;
             })
             .each(function(d) {
-                var bb = this.parentElement.firstChild.getBBox();
+                var bb = bbox(this);
                 d.py = bb.y + bb.height / 2;
             })
 
         datapoints.exit().remove();
         return nodes;
+    }
+
+    function bbox(t) {
+        return t.parentNode.childNodes[0].getBBox();
     }
 
     function pushArray(arr, arr2) {
