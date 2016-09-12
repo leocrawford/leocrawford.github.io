@@ -96,47 +96,42 @@
         .width(600)
         .height(500);
 
-        function ticked() {
-              svg.selectAll(".point")
-                .attr("cx", function(d) {
-                      return d.x;
-                })
-                .attr("cy", function(d) {
-                    return d.y;
-                });
+    function ticked() {
+        svg.selectAll(".point")
+            .attr("cx", function(d) {
+                return d.x;
+            })
+            .attr("cy", function(d) {
+                return d.y;
+            });
+    }
+
+    var simulation = d3.forceSimulation()
+        //      .force("charge", d3.forceManyBody().strength(50))
+        .force("collide", d3.forceCollide(8))
+        .force("x", d3.forceX(node => node.px))
+        .force("y", d3.forceY(node => node.py))
+        .force("constrain", constrain())
+        .on("tick", ticked);
+
+
+    function constrain() {
+        var nodes;
+
+        function force(alpha) {
+            // console.log("constrain");}
+            for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
+                node = nodes[i];
+                //    node.vx = 0;
+                // node.x = 0;
+            }
         }
 
-    var simulation  = d3.forceSimulation()
-            //      .force("charge", d3.forceManyBody().strength(50))
-            .force("collide", d3.forceCollide(8))
-        /*    .force("x", d3.forceX(function x(node) {
-                    return node.px;
-            }))
-            .force("y", d3.forceY(function y(node) {
-                return node.py;
-            })) */
-            .force("center", d3.forceCenter(1,
-              node => ({node.px})          ))
-            .force("constrain",constrain())
-            .on("tick", ticked)
-          ;
-
-
-      function constrain() {
-        var nodes;
-       function force(alpha) {
-      // console.log("constrain");}
-      for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
-        node = nodes[i];
-    //    node.vx = 0;
-        // node.x = 0;
-      }}
-
-      force.initialize = function(_) {
-        nodes = _;
+        force.initialize = function(_) {
+            nodes = _;
+        }
+        return force;
     }
-    return force;
-  }
 
 
     d3.select("#venn").datum(getSetIntersections()).call(chart);
@@ -223,12 +218,10 @@
             .attr("class", "point")
             .attr("r", 8)
             .each(function(d) {
-                var bb = this.parentElement.firstChild.getBBox();
-                d.px = bb.x + bb.width / 2;
+                d.px = bbox(this).x + bbox(this).width / 2;
             })
             .each(function(d) {
-                var bb = this.parentElement.firstChild.getBBox();
-                d.py = bb.y + bb.height / 2;
+                d.py = bbox(this).y + bbox(this).height / 2;
             })
             .call(d3.drag()
                 .on("start", dragstarted)
