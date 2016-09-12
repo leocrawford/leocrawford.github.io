@@ -109,12 +109,14 @@
     var simulation  = d3.forceSimulation()
             //      .force("charge", d3.forceManyBody().strength(50))
             .force("collide", d3.forceCollide(8))
-            .force("x", d3.forceX(function x(node) {
+        /*    .force("x", d3.forceX(function x(node) {
                     return node.px;
             }))
             .force("y", d3.forceY(function y(node) {
                 return node.py;
-            }))
+            })) */
+            .force("center", d3.forceCenter(1,
+              node => ({node.px})          ))
             .force("constrain",constrain())
             .on("tick", ticked)
           ;
@@ -124,12 +126,10 @@
         var nodes;
        function force(alpha) {
       // console.log("constrain");}
-console.log(nodes.length);
       for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
         node = nodes[i];
-        console.log(node);
-        node.vx = 0;
-        node.x = 0;
+    //    node.vx = 0;
+        // node.x = 0;
       }}
 
       force.initialize = function(_) {
