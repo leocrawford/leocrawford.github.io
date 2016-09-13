@@ -82,12 +82,9 @@
     }
 
     function fillArrayWithLetters(n, prefix) {
-        var arr = Array.apply(null, Array(n));
-        return arr.map(function(x, i) {
-            return {
-                name: prefix + i,
-            }
-        });
+        return Array.apply(null, Array(n)).map((x, i) => ({
+            name: prefix + i
+        }));
     }
 
 
@@ -97,33 +94,32 @@
         .height(500);
 
     function ticked() {
-        svg.selectAll(".point")
-            .attr("cx", function(d) {
-                return d.x;
-            })
-            .attr("cy", function(d) {
-                return d.y;
-            });
+        d3.select("svg").selectAll(".point")
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .style("fill", d => d.highlight ? "red" : "blue");
     }
 
     var simulation = d3.forceSimulation()
-        //      .force("charge", d3.forceManyBody().strength(50))
         .force("collide", d3.forceCollide(8))
         .force("x", d3.forceX(node => node.px))
         .force("y", d3.forceY(node => node.py))
         .force("constrain", constrain())
         .on("tick", ticked);
 
-
     function constrain() {
         var nodes;
-
         function force(alpha) {
             // console.log("constrain");}
             for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
                 node = nodes[i];
-                //    node.vx = 0;
-                // node.x = 0;
+                node.highlight = !d3.polygonContains(
+                    node.pshape, [node.x + node.vx, node.y + node.vy])
+
+                if (node.highlight) {
+                    node.vx = (node.px - node.x) / 3
+                    node.vy = (node.py - node.y) / 3
+                }
             }
         }
 
@@ -134,13 +130,14 @@
     }
 
 
-    d3.select("#venn").datum(getSetIntersections()).call(chart);
-    var svg = d3.select("svg");
-    update();
+    // initial draw
+    recalc();
     // redraw the sets on any change in input
-    d3.selectAll("input").on("change", function() {
+    d3.selectAll("input").on("change", recalc);
+
+    function recalc() {
         d3.select("#venn").datum(getSetIntersections()).call(chart).call(update);
-    });
+    }
 
 
 
@@ -188,6 +185,7 @@
         simulation
             .nodes(addPoints())
             .alpha(1)
+            .restart()
     }
 
     function addPoints() {
@@ -195,16 +193,9 @@
 
         var datapoints = d3.selectAll("#venn .venn-circle").selectAll(".point")
             .data(function(d, i) {
-                var x = (d == null || d.children == null) ? [] : d.children;
-                pushArray(nodes, x);
-                return x;
-            }, function(d) {
-                return d.name;
-            });
-
-        console.log("enter and exit");
-        console.log(datapoints._enter[0]);
-        console.log(datapoints._exit[0]);
+                pushArray(nodes, d.children);
+                return d.children;
+            }, d => d.name);
 
         // lets copy the current x and y value back from object to data so that
         // the simulation carries on rather than restarting
@@ -217,32 +208,45 @@
             .append("circle")
             .attr("class", "point")
             .attr("r", 8)
-            .each(function(d) {
-                d.px = bbox(this).x + bbox(this).width / 2;
-            })
-            .each(function(d) {
-                d.py = bbox(this).y + bbox(this).height / 2;
-            })
+            .each(setPx)
+            .each(setPy)
+            .each(setPShape)
             .call(d3.drag()
                 .on("start", dragstarted)
                 .on("drag", dragged)
                 .on("end", dragended));
 
-        datapoints.each(function(d) {
-                var bb = bbox(this);
-                d.px = bb.x + bb.width / 2;
-            })
-            .each(function(d) {
-                var bb = bbox(this);
-                d.py = bb.y + bb.height / 2;
-            })
+        datapoints
+            .each(setPx)
+            .each(setPy)
+            .each(setPShape)
 
         datapoints.exit().remove();
         return nodes;
     }
 
     function bbox(t) {
-        return t.parentNode.childNodes[0].getBBox();
+        return t.parentNode.firstChild.getBBox();
+    }
+
+    function setPx(d) {
+        d.px = bbox(this).x + bbox(this).width / 2;
+    }
+
+    function setPy(d) {
+        d.py = bbox(this).y + bbox(this).height / 2;
+    }
+
+
+    function setPShape(d) {
+        var path = this.parentNode.firstChild;
+        var length = path.getTotalLength();
+        var polygon = [];
+        for (var loop = 0; loop < length; loop += length / 100) {
+            var sample = path.getPointAtLength(loop);
+            polygon.push([sample.x, sample.y]);
+        }
+        d.pshape = polygon;
     }
 
     function pushArray(arr, arr2) {
