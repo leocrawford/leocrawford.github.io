@@ -68,7 +68,7 @@
 <script src="venn.js"></script>
 <script>
     function getSetIntersections() {
-        areas = d3.selectAll(".venn_area").nodes().map(
+        areas = d3.selectAll("table .venn_area").nodes().map(
             function(element) {
                 var size = parseFloat(element.value);
                 return {
@@ -101,24 +101,36 @@
     }
 
     var simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody(-30))
         .force("collide", d3.forceCollide(8))
-        .force("x", d3.forceX(node => node.px))
-        .force("y", d3.forceY(node => node.py))
+        .force("x", d3.forceX(node => node.parent.data.x).strength(0.05))
+        .force("y", d3.forceY(node => node.parent.data.y).strength(0.05))
         .force("constrain", constrain())
         .on("tick", ticked);
 
     function constrain() {
         var nodes;
+        var items = 6;
+        var r = 8;
+
         function force(alpha) {
             // console.log("constrain");}
             for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
                 node = nodes[i];
-                node.highlight = !d3.polygonContains(
-                    node.pshape, [node.x + node.vx, node.y + node.vy])
+                var highlight = false;
+                for (var it = 0; it < items; it++) {
+
+                    var x = node.x + node.vx + r * Math.cos(2 * Math.PI * it / items);
+                    var y = node.y + node.vy + r * Math.sin(2 * Math.PI * it / items);
+
+                    highlight = highlight || !d3.polygonContains(
+                        node.parent.data.shape, [x, y])
+                }
+                node.highlight = highlight;
 
                 if (node.highlight) {
-                    node.vx = (node.px - node.x) / 3
-                    node.vy = (node.py - node.y) / 3
+                    node.vx = (node.parent.data.x - node.x) * k * 2;
+                    node.vy = (node.parent.data.y - node.y) * k * 2;
                 }
             }
         }
@@ -129,6 +141,7 @@
         return force;
     }
 
+    var setIntersections;
 
     // initial draw
     recalc();
@@ -136,7 +149,8 @@
     d3.selectAll("input").on("change", recalc);
 
     function recalc() {
-        d3.select("#venn").datum(getSetIntersections()).call(chart).call(update);
+        setIntersections = getSetIntersections();
+        d3.select("#venn").datum(setIntersections).call(chart).call(update);
     }
 
 
@@ -144,9 +158,18 @@
     // tweak style
     var colours = ['black', 'red', 'blue'];
     d3.selectAll("#venn .venn-circle path")
-        .style("fill-opacity", 0)
-        .style("stroke-width", 10)
+        .style("fill-opacity", 0.2) // (d,i)=>(i==1 ? 1 : 0))
+        .style("stroke-width", 1)
         .style("stroke-opacity", .5)
+        .style("stroke", function(d, i) {
+            return colours[i];
+        });
+
+    d3.selectAll("#venn .venn-intersection path")
+        .style("fill-opacity", 0)
+        .style("stroke-width", 2)
+        .style("stroke-opacity", .5)
+        .style("fill", "green")
         .style("stroke", function(d, i) {
             return colours[i];
         });
@@ -158,6 +181,8 @@
         })
         .style("font-size", "32px")
         .style("font-weight", "100");
+
+
 
 
     function dragstarted(d) {
@@ -182,6 +207,11 @@
 
 
     function update() {
+        d3.selectAll("#venn .venn-area")
+            .each(setPx)
+            .each(setPy)
+            .each(setPShape);
+
         simulation
             .nodes(addPoints())
             .alpha(1)
@@ -189,13 +219,18 @@
     }
 
     function addPoints() {
-        var nodes = [];
+        var hierarchy = d3.hierarchy(setIntersections,
+            d => (typeof d.children == "undefined") ? d : d.children)
+        var nodes = hierarchy.leaves();
 
-        var datapoints = d3.selectAll("#venn .venn-circle").selectAll(".point")
-            .data(function(d, i) {
-                pushArray(nodes, d.children);
-                return d.children;
-            }, d => d.name);
+        // make sure there is a <g> points
+        d3.selectAll("#venn svg").selectAll(".points")
+            .data([null]).enter().append("g").attr("class", "points");
+
+        var points = d3.select(".points");
+
+        var datapoints = points.selectAll(".point")
+            .data(nodes, d => d.data.name);
 
         // lets copy the current x and y value back from object to data so that
         // the simulation carries on rather than restarting
@@ -208,49 +243,40 @@
             .append("circle")
             .attr("class", "point")
             .attr("r", 8)
-            .each(setPx)
-            .each(setPy)
-            .each(setPShape)
             .call(d3.drag()
                 .on("start", dragstarted)
                 .on("drag", dragged)
                 .on("end", dragended));
 
-        datapoints
-            .each(setPx)
-            .each(setPy)
-            .each(setPShape)
+
 
         datapoints.exit().remove();
         return nodes;
     }
 
     function bbox(t) {
-        return t.parentNode.firstChild.getBBox();
+        return t.firstChild.getBBox();
     }
 
     function setPx(d) {
-        d.px = bbox(this).x + bbox(this).width / 2;
+        d.x = bbox(this).x + bbox(this).width / 2;
     }
 
     function setPy(d) {
-        d.py = bbox(this).y + bbox(this).height / 2;
+        d.y = bbox(this).y + bbox(this).height / 2;
     }
 
 
     function setPShape(d) {
-        var path = this.parentNode.firstChild;
+        var path = this.firstChild;
+
         var length = path.getTotalLength();
         var polygon = [];
         for (var loop = 0; loop < length; loop += length / 100) {
             var sample = path.getPointAtLength(loop);
             polygon.push([sample.x, sample.y]);
         }
-        d.pshape = polygon;
-    }
-
-    function pushArray(arr, arr2) {
-        arr.push.apply(arr, arr2);
+        d.shape = polygon;
     }
 </script>
 

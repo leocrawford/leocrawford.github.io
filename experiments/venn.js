@@ -1,8 +1,10 @@
-(function (global, factory) {
+(function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-selection'), require('d3-transition')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'd3-selection', 'd3-transition'], factory) :
-    factory((global.venn = {}),global.d3,global.d3);
-}(this, function (exports,d3Selection,d3Transition) { 'use strict';
+        typeof define === 'function' && define.amd ? define(['exports', 'd3-selection', 'd3-transition'], factory) :
+        factory((global.venn = {}), global.d3, global.d3);
+}(this, function(exports, d3Selection, d3Transition) {
+    'use strict';
+
 
     /** finds the zeros of a function, given two starting points (which must
      * have opposite signs */
@@ -39,8 +41,19 @@
 
     // need some basic operations on vectors, rather than adding a dependency,
     // just define here
-    function zeros(x) { var r = new Array(x); for (var i = 0; i < x; ++i) { r[i] = 0; } return r; }
-    function zerosM(x,y) { return zeros(x).map(function() { return zeros(y); }); }
+    function zeros(x) {
+        var r = new Array(x);
+        for (var i = 0; i < x; ++i) {
+            r[i] = 0;
+        }
+        return r;
+    }
+
+    function zerosM(x, y) {
+        return zeros(x).map(function() {
+            return zeros(y);
+        });
+    }
 
     function dot(a, b) {
         var ret = 0;
@@ -50,7 +63,7 @@
         return ret;
     }
 
-    function norm2(a)  {
+    function norm2(a) {
         return Math.sqrt(dot(a, a));
     }
 
@@ -91,11 +104,13 @@
         for (var i = 0; i < N; ++i) {
             var point = x0.slice();
             point[i] = point[i] ? point[i] * nonZeroDelta : zeroDelta;
-            simplex[i+1] = point;
-            simplex[i+1].fx = f(point);
+            simplex[i + 1] = point;
+            simplex[i + 1].fx = f(point);
         }
 
-        var sortOrder = function(a, b) { return a.fx - b.fx; };
+        var sortOrder = function(a, b) {
+            return a.fx - b.fx;
+        };
 
         var centroid = x0.slice(),
             reflected = x0.slice(),
@@ -130,18 +145,18 @@
             // reflect the worst point past the centroid  and compute loss at reflected
             // point
             var worst = simplex[N];
-            weightedSum(reflected, 1+rho, centroid, -rho, worst);
+            weightedSum(reflected, 1 + rho, centroid, -rho, worst);
             reflected.fx = f(reflected);
 
             // if the reflected point is the best seen, then possibly expand
             if (reflected.fx <= simplex[0].fx) {
-                weightedSum(expanded, 1+chi, centroid, -chi, worst);
+                weightedSum(expanded, 1 + chi, centroid, -chi, worst);
                 expanded.fx = f(expanded);
                 if (expanded.fx < reflected.fx) {
                     temp = simplex[N];
                     simplex[N] = expanded;
                     expanded = temp;
-                }  else {
+                } else {
                     temp = simplex[N];
                     simplex[N] = reflected;
                     reflected = temp;
@@ -150,12 +165,12 @@
 
             // if the reflected point is worse than the second worst, we need to
             // contract
-            else if (reflected.fx >= simplex[N-1].fx) {
+            else if (reflected.fx >= simplex[N - 1].fx) {
                 var shouldReduce = false;
 
                 if (reflected.fx > worst.fx) {
                     // do an inside contraction
-                    weightedSum(contracted, 1+psi, centroid, -psi, worst);
+                    weightedSum(contracted, 1 + psi, centroid, -psi, worst);
                     contracted.fx = f(contracted);
                     if (contracted.fx < worst.fx) {
                         temp = simplex[N];
@@ -166,7 +181,7 @@
                     }
                 } else {
                     // do an outside contraction
-                    weightedSum(contracted, 1-psi * rho, centroid, psi*rho, worst);
+                    weightedSum(contracted, 1 - psi * rho, centroid, psi * rho, worst);
                     contracted.fx = f(contracted);
                     if (contracted.fx <= reflected.fx) {
                         temp = simplex[N];
@@ -193,15 +208,25 @@
         }
 
         simplex.sort(sortOrder);
-        return {f : simplex[0].fx,
-                solution : simplex[0]};
+        return {
+            f: simplex[0].fx,
+            solution: simplex[0]
+        };
     }
 
     function minimizeConjugateGradient(f, initial, params) {
         // allocate all memory up front here, keep out of the loop for perfomance
         // reasons
-        var current = {x: initial.slice(), fx: 0, fxprime: initial.slice()},
-            next = {x: initial.slice(), fx: 0, fxprime: initial.slice()},
+        var current = {
+                x: initial.slice(),
+                fx: 0,
+                fxprime: initial.slice()
+            },
+            next = {
+                x: initial.slice(),
+                fx: 0,
+                fxprime: initial.slice()
+            },
             yk = initial.slice(),
             pk, temp,
             a = 1,
@@ -216,9 +241,11 @@
 
         for (var i = 0; i < maxIterations; ++i) {
             if (params.history) {
-                params.history.push({x: current.x.slice(),
-                                     fx: current.fx,
-                                     fxprime: current.fxprime.slice()});
+                params.history.push({
+                    x: current.x.slice(),
+                    fx: current.fx,
+                    fxprime: current.fxprime.slice()
+                });
             }
 
             a = wolfeLineSearch(f, pk, current, next, a);
@@ -248,9 +275,11 @@
         }
 
         if (params.history) {
-            params.history.push({x: current.x.slice(),
-                                 fx: current.fx,
-                                 fxprime: current.fxprime.slice()});
+            params.history.push({
+                x: current.x.slice(),
+                fx: current.fx,
+                fxprime: current.fxprime.slice()
+            });
         }
 
         return current;
@@ -261,8 +290,10 @@
     /// searches along line 'pk' for a point that satifies the wolfe conditions
     /// See 'Numerical Optimization' by Nocedal and Wright p59-60
     function wolfeLineSearch(f, pk, current, next, a) {
-        var phi0 = current.fx, phiPrime0 = dot(current.fxprime, pk),
-            phi = phi0, phi_old = phi0,
+        var phi0 = current.fx,
+            phiPrime0 = dot(current.fxprime, pk),
+            phi = phi0,
+            phi_old = phi0,
             phiPrime = phiPrime0,
             a0 = 0;
 
@@ -270,7 +301,7 @@
 
         function zoom(a_lo, a_high, phi_lo) {
             for (var iteration = 0; iteration < 16; ++iteration) {
-                a = (a_lo + a_high)/2;
+                a = (a_lo + a_high) / 2;
                 weightedSum(next.x, 1.0, current.x, a, pk);
                 phi = next.fx = f(next.x, next.fxprime);
                 phiPrime = dot(next.fxprime, pk);
@@ -279,12 +310,12 @@
                     (phi >= phi_lo)) {
                     a_high = a;
 
-                } else  {
+                } else {
                     if (Math.abs(phiPrime) <= -c2 * phiPrime0) {
                         return a;
                     }
 
-                    if (phiPrime * (a_high - a_lo) >=0) {
+                    if (phiPrime * (a_high - a_lo) >= 0) {
                         a_high = a_lo;
                     }
 
@@ -309,7 +340,7 @@
                 return a;
             }
 
-            if (phiPrime >= 0 ) {
+            if (phiPrime >= 0) {
                 return zoom(a, a0, phi);
             }
 
@@ -325,16 +356,30 @@
 
     /** Returns the intersection area of a bunch of circles (where each circle
      is an object having an x,y and radius property) */
-    function intersectionArea(circles, stats) {
+    function intersectionArea(circles, allcircles, stats) {
         // get all the intersection points of the circles
-        var intersectionPoints = getIntersectionPoints(circles);
+
+        var usecircles;
+        if (allcircles == null)
+            usecircles = circles;
+        else
+            usecircles = Object.keys(allcircles).map(e => allcircles[e]);
+
+        var intersectionPoints = getIntersectionPoints(usecircles);
 
         // filter out points that aren't included in all the circles
-        var innerPoints = intersectionPoints.filter(function (p) {
-            return containedInCircles(p, circles);
+        var innerPoints = intersectionPoints.filter(function(p) {
+            return containedInCircles(p, circles, usecircles)
         });
 
-        var arcArea = 0, polygonArea = 0, arcs = [], i;
+        console.log("" + circles.length + " gets " + innerPoints.length)
+
+        var arcArea = 0,
+            polygonArea = 0,
+            arcs = [],
+            i;
+
+
 
         // if we have intersection points that are within all the circles,
         // then figure out the area contained by them
@@ -342,11 +387,15 @@
             // sort the points by angle from the center of the polygon, which lets
             // us just iterate over points to get the edges
             var center = getCenter(innerPoints);
-            for (i = 0; i < innerPoints.length; ++i ) {
+            for (i = 0; i < innerPoints.length; ++i) {
                 var p = innerPoints[i];
                 p.angle = Math.atan2(p.x - center.x, p.y - center.y);
             }
-            innerPoints.sort(function(a,b) { return b.angle - a.angle;});
+            innerPoints.sort(function(a, b) {
+                return b.angle - a.angle;
+            });
+
+
 
             // iterate over all points, get arc between the points
             // and update the areas
@@ -358,37 +407,42 @@
                 polygonArea += (p2.x + p1.x) * (p1.y - p2.y);
 
                 // updating the arc area is a little more involved
-                var midPoint = {x : (p1.x + p2.x) / 2,
-                                y : (p1.y + p2.y) / 2},
+                var midPoint = {
+                        x: (p1.x + p2.x) / 2,
+                        y: (p1.y + p2.y) / 2
+                    },
                     arc = null;
 
                 for (var j = 0; j < p1.parentIndex.length; ++j) {
                     if (p2.parentIndex.indexOf(p1.parentIndex[j]) > -1) {
                         // figure out the angle halfway between the two points
                         // on the current circle
-                        var circle = circles[p1.parentIndex[j]],
+                        var circle = usecircles[p1.parentIndex[j]],
                             a1 = Math.atan2(p1.x - circle.x, p1.y - circle.y),
                             a2 = Math.atan2(p2.x - circle.x, p2.y - circle.y);
 
                         var angleDiff = (a2 - a1);
                         if (angleDiff < 0) {
-                            angleDiff += 2*Math.PI;
+                            angleDiff += 2 * Math.PI;
                         }
 
                         // and use that angle to figure out the width of the
                         // arc
-                        var a = a2 - angleDiff/2,
+                        var a = a2 - angleDiff / 2,
                             width = distance(midPoint, {
-                                x : circle.x + circle.radius * Math.sin(a),
-                                y : circle.y + circle.radius * Math.cos(a)
+                                x: circle.x + circle.radius * Math.sin(a),
+                                y: circle.y + circle.radius * Math.cos(a)
                             });
 
                         // pick the circle whose arc has the smallest width
                         if ((arc === null) || (arc.width > width)) {
-                            arc = { circle : circle,
-                                    width : width,
-                                    p1 : p1,
-                                    p2 : p2};
+                            arc = {
+                                circle: circle,
+                                width: width,
+                                p1: p1,
+                                p2: p2,
+                                within: circles.includes(circle)
+                            };
                         }
                     }
                 }
@@ -399,6 +453,7 @@
                     p2 = p1;
                 }
             }
+
         } else {
             // no intersection points, is either disjoint - or is completely
             // overlapped. figure out which by examining the smallest circle
@@ -424,10 +479,18 @@
 
             } else {
                 arcArea = smallest.radius * smallest.radius * Math.PI;
-                arcs.push({circle : smallest,
-                           p1: { x: smallest.x,        y : smallest.y + smallest.radius},
-                           p2: { x: smallest.x - SMALL, y : smallest.y + smallest.radius},
-                           width : smallest.radius * 2 });
+                arcs.push({
+                    circle: smallest,
+                    p1: {
+                        x: smallest.x,
+                        y: smallest.y + smallest.radius
+                    },
+                    p2: {
+                        x: smallest.x - SMALL,
+                        y: smallest.y + smallest.radius
+                    },
+                    width: smallest.radius * 2
+                });
             }
         }
 
@@ -445,10 +508,19 @@
     }
 
     /** returns whether a point is contained by all of a list of circles */
-    function containedInCircles(point, circles) {
-        for (var i = 0; i < circles.length; ++i) {
-            if (distance(point, circles[i]) > circles[i].radius + SMALL) {
-                return false;
+    function containedInCircles(point, circles, allcircles) {
+        for (var i = 0; i < allcircles.length; ++i) {
+            var item = allcircles[i];
+            if (circles.includes(item)) {
+                if (distance(point, item) > item.radius + SMALL) {
+                    return false;
+                }
+            } else {
+                // console.log("" + item.x + " not in " + circles.map(d => d.x));
+                if (distance(point, item) < item.radius - SMALL) {
+                    // console.log("drop"+point.x)
+                     return false;
+                }
             }
         }
         return true;
@@ -460,10 +532,10 @@
         for (var i = 0; i < circles.length; ++i) {
             for (var j = i + 1; j < circles.length; ++j) {
                 var intersect = circleCircleIntersection(circles[i],
-                                                              circles[j]);
+                    circles[j]);
                 for (var k = 0; k < intersect.length; ++k) {
                     var p = intersect[k];
-                    p.parentIndex = [i,j];
+                    p.parentIndex = [i, j];
                     ret.push(p);
                 }
             }
@@ -484,7 +556,7 @@
     /** euclidean distance between two points */
     function distance(p1, p2) {
         return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) +
-                         (p1.y - p2.y) * (p1.y - p2.y));
+            (p1.y - p2.y) * (p1.y - p2.y));
     }
 
 
@@ -528,14 +600,22 @@
             rx = -(p2.y - p1.y) * (h / d),
             ry = -(p2.x - p1.x) * (h / d);
 
-        return [{x: x0 + rx, y : y0 - ry },
-                {x: x0 - rx, y : y0 + ry }];
+        return [{
+            x: x0 + rx,
+            y: y0 - ry
+        }, {
+            x: x0 - rx,
+            y: y0 + ry
+        }];
     }
 
     /** Returns the center of a bunch of points */
     function getCenter(points) {
-        var center = {x: 0, y: 0};
-        for (var i =0; i < points.length; ++i ) {
+        var center = {
+            x: 0,
+            y: 0
+        };
+        for (var i = 0; i < points.length; ++i) {
             center.x += points[i].x;
             center.y += points[i].y;
         }
@@ -543,6 +623,7 @@
         center.y /= points.length;
         return center;
     }
+
 
     /** given a list of set objects, and their corresponding overlaps.
     updates the (x, y, radius) attribute on each set such that their positions
@@ -559,7 +640,9 @@
         var circles = initialLayout(areas);
 
         // transform x/y coordinates to a vector to optimize
-        var initial = [], setids = [], setid;
+        var initial = [],
+            setids = [],
+            setid;
         for (setid in circles) {
             if (circles.hasOwnProperty(setid)) {
                 initial.push(circles[setid].x);
@@ -576,11 +659,12 @@
                 var current = {};
                 for (var i = 0; i < setids.length; ++i) {
                     var setid = setids[i];
-                    current[setid] = {x: values[2 * i],
-                                      y: values[2 * i + 1],
-                                      radius : circles[setid].radius,
-                                     // size : circles[setid].size
-                                     };
+                    current[setid] = {
+                        x: values[2 * i],
+                        y: values[2 * i + 1],
+                        radius: circles[setid].radius,
+                        // size : circles[setid].size
+                    };
                 }
                 return lossFunction(current, areas);
             },
@@ -604,7 +688,7 @@
     have the overlap area 'overlap' */
     function distanceFromIntersectArea(r1, r2, overlap) {
         // handle complete overlapped circles
-        if (Math.min(r1, r2) * Math.min(r1,r2) * Math.PI <= overlap + SMALL$1) {
+        if (Math.min(r1, r2) * Math.min(r1, r2) * Math.PI <= overlap + SMALL$1) {
             return Math.abs(r1 - r2);
         }
 
@@ -621,7 +705,9 @@
         areas = areas.slice();
 
         // two circle intersections that aren't defined
-        var ids = [], pairs = {}, i, j, a, b;
+        var ids = [],
+            pairs = {},
+            i, j, a, b;
         for (i = 0; i < areas.length; ++i) {
             var area = areas[i];
             if (area.sets.length == 1) {
@@ -633,15 +719,19 @@
                 pairs[[b, a]] = true;
             }
         }
-        ids.sort(function(a, b) { return a > b; });
+        ids.sort(function(a, b) {
+            return a > b;
+        });
 
         for (i = 0; i < ids.length; ++i) {
             a = ids[i];
             for (j = i + 1; j < ids.length; ++j) {
                 b = ids[j];
                 if (!([a, b] in pairs)) {
-                    areas.push({'sets': [a, b],
-                                'size': 0});
+                    areas.push({
+                        'sets': [a, b],
+                        'size': 0
+                    });
                 }
             }
         }
@@ -657,42 +747,50 @@
 
         // compute required distances between all the sets such that
         // the areas match
-        areas.filter(function(x) { return x.sets.length == 2; })
+        areas.filter(function(x) {
+                return x.sets.length == 2;
+            })
             .map(function(current) {
-            var left = setids[current.sets[0]],
-                right = setids[current.sets[1]],
-                r1 = Math.sqrt(sets[left].size / Math.PI),
-                r2 = Math.sqrt(sets[right].size / Math.PI),
-                distance = distanceFromIntersectArea(r1, r2, current.size);
+                var left = setids[current.sets[0]],
+                    right = setids[current.sets[1]],
+                    r1 = Math.sqrt(sets[left].size / Math.PI),
+                    r2 = Math.sqrt(sets[right].size / Math.PI),
+                    distance = distanceFromIntersectArea(r1, r2, current.size);
 
-            distances[left][right] = distances[right][left] = distance;
+                distances[left][right] = distances[right][left] = distance;
 
-            // also update constraints to indicate if its a subset or disjoint
-            // relationship
-            var c = 0;
-            if (current.size + 1e-10 >= Math.min(sets[left].size,
-                                                 sets[right].size)) {
-                c = 1;
-            } else if (current.size <= 1e-10) {
-                c = -1;
-            }
-            constraints[left][right] = constraints[right][left] = c;
-        });
+                // also update constraints to indicate if its a subset or disjoint
+                // relationship
+                var c = 0;
+                if (current.size + 1e-10 >= Math.min(sets[left].size,
+                        sets[right].size)) {
+                    c = 1;
+                } else if (current.size <= 1e-10) {
+                    c = -1;
+                }
+                constraints[left][right] = constraints[right][left] = c;
+            });
 
-        return {distances: distances, constraints: constraints};
+        return {
+            distances: distances,
+            constraints: constraints
+        };
     }
 
     /// computes the gradient and loss simulatenously for our constrained MDS optimizer
     function constrainedMDSGradient(x, fxprime, distances, constraints) {
-        var loss = 0, i;
+        var loss = 0,
+            i;
         for (i = 0; i < fxprime.length; ++i) {
             fxprime[i] = 0;
         }
 
         for (i = 0; i < distances.length; ++i) {
-            var xi = x[2 * i], yi = x[2 * i + 1];
+            var xi = x[2 * i],
+                yi = x[2 * i + 1];
             for (var j = i + 1; j < distances.length; ++j) {
-                var xj = x[2 * j], yj = x[2 * j + 1],
+                var xj = x[2 * j],
+                    yj = x[2 * j + 1],
                     dij = distances[i][j],
                     constraint = constraints[i][j];
 
@@ -707,11 +805,11 @@
 
                 loss += 2 * delta * delta;
 
-                fxprime[2*i]     += 4 * delta * (xi - xj);
-                fxprime[2*i + 1] += 4 * delta * (yi - yj);
+                fxprime[2 * i] += 4 * delta * (xi - xj);
+                fxprime[2 * i + 1] += 4 * delta * (yi - yj);
 
-                fxprime[2*j]     += 4 * delta * (xj - xi);
-                fxprime[2*j + 1] += 4 * delta * (yj - yi);
+                fxprime[2 * j] += 4 * delta * (xj - xi);
+                fxprime[2 * j + 1] += 4 * delta * (yj - yi);
             }
         }
         return loss;
@@ -726,7 +824,7 @@
         // if it outperforms. (greedy is aesthetically better on 2/3 circles
         // since it axis aligns)
         if (areas.length >= 8) {
-            var constrained  = constrainedMDSLayout(areas, params),
+            var constrained = constrainedMDSLayout(areas, params),
                 constrainedLoss = lossFunction(constrained, areas),
                 greedyLoss = lossFunction(initial, areas);
 
@@ -743,8 +841,10 @@
         var restarts = params.restarts || 10;
 
         // bidirectionally map sets to a rowid  (so we can create a matrix)
-        var sets = [], setids = {}, i;
-        for (i = 0; i < areas.length; ++i ) {
+        var sets = [],
+            setids = {},
+            i;
+        for (i = 0; i < areas.length; ++i) {
             var area = areas[i];
             if (area.sets.length == 1) {
                 setids[area.sets[0]] = sets.length;
@@ -758,9 +858,12 @@
 
         // keep distances bounded, things get messed up otherwise.
         // TODO: proper preconditioner?
-        var norm = norm2(distances.map(norm2))/(distances.length);
-        distances = distances.map(function (row) {
-            return row.map(function (value) { return value / norm; });});
+        var norm = norm2(distances.map(norm2)) / (distances.length);
+        distances = distances.map(function(row) {
+            return row.map(function(value) {
+                return value / norm;
+            });
+        });
 
         var obj = function(x, fxprime) {
             return constrainedMDSGradient(x, fxprime, distances, constraints);
@@ -768,7 +871,7 @@
 
         var best, current;
         for (i = 0; i < restarts; ++i) {
-            var initial = zeros(distances.length*2).map(Math.random);
+            var initial = zeros(distances.length * 2).map(Math.random);
 
             current = minimizeConjugateGradient(obj, initial, params);
             if (!best || (current.fx < best.fx)) {
@@ -782,9 +885,9 @@
         for (i = 0; i < sets.length; ++i) {
             var set = sets[i];
             circles[set.sets[0]] = {
-                x: positions[2*i] * norm,
-                y: positions[2*i + 1] * norm,
-                radius:  Math.sqrt(set.size / Math.PI)
+                x: positions[2 * i] * norm,
+                y: positions[2 * i + 1] * norm,
+                radius: Math.sqrt(set.size / Math.PI)
             };
         }
 
@@ -801,34 +904,50 @@
     overlapping areas to already positioned sets are basically right */
     function greedyLayout(areas) {
         // define a circle for each set
-        var circles = {}, setOverlaps = {}, set;
+        var circles = {},
+            setOverlaps = {},
+            set;
         for (var i = 0; i < areas.length; ++i) {
             var area = areas[i];
             if (area.sets.length == 1) {
                 set = area.sets[0];
-                circles[set] = {x: 1e10, y: 1e10,
-                                rowid: circles.length,
-                                size: area.size,
-                                radius: Math.sqrt(area.size / Math.PI)};
+                circles[set] = {
+                    x: 1e10,
+                    y: 1e10,
+                    rowid: circles.length,
+                    size: area.size,
+                    radius: Math.sqrt(area.size / Math.PI)
+                };
                 setOverlaps[set] = [];
             }
         }
-        areas = areas.filter(function(a) { return a.sets.length == 2; });
+        areas = areas.filter(function(a) {
+            return a.sets.length == 2;
+        });
 
         // map each set to a list of all the other sets that overlap it
         for (i = 0; i < areas.length; ++i) {
             var current = areas[i];
             var weight = current.hasOwnProperty('weight') ? current.weight : 1.0;
-            var left = current.sets[0], right = current.sets[1];
+            var left = current.sets[0],
+                right = current.sets[1];
 
             // completely overlapped circles shouldn't be positioned early here
             if (current.size + SMALL$1 >= Math.min(circles[left].size,
-                                                 circles[right].size)) {
+                    circles[right].size)) {
                 weight = 0;
             }
 
-            setOverlaps[left].push ({set:right, size:current.size, weight:weight});
-            setOverlaps[right].push({set:left,  size:current.size, weight:weight});
+            setOverlaps[left].push({
+                set: right,
+                size: current.size,
+                weight: weight
+            });
+            setOverlaps[right].push({
+                set: left,
+                size: current.size,
+                weight: weight
+            });
         }
 
         // get list of most overlapped sets
@@ -840,18 +959,22 @@
                     size += setOverlaps[set][i].size * setOverlaps[set][i].weight;
                 }
 
-                mostOverlapped.push({set: set, size:size});
+                mostOverlapped.push({
+                    set: set,
+                    size: size
+                });
             }
         }
 
         // sort by size desc
-        function sortOrder(a,b) {
+        function sortOrder(a, b) {
             return b.size - a.size;
         }
         mostOverlapped.sort(sortOrder);
 
         // keep track of what sets have been laid out
         var positioned = {};
+
         function isPositioned(element) {
             return element.set in positioned;
         }
@@ -864,7 +987,10 @@
         }
 
         // add most overlapped set at (0,0)
-        positionSet({x: 0, y: 0}, mostOverlapped[0].set);
+        positionSet({
+            x: 0,
+            y: 0
+        }, mostOverlapped[0].set);
 
         // get distances between all points. TODO, necessary?
         // answer: probably not
@@ -885,24 +1011,42 @@
                 // get appropriate distance from most overlapped already added set
                 var p1 = circles[overlap[j].set],
                     d1 = distanceFromIntersectArea(set.radius, p1.radius,
-                                                   overlap[j].size);
+                        overlap[j].size);
 
                 // sample positions at 90 degrees for maximum aesthetics
-                points.push({x : p1.x + d1, y : p1.y});
-                points.push({x : p1.x - d1, y : p1.y});
-                points.push({y : p1.y + d1, x : p1.x});
-                points.push({y : p1.y - d1, x : p1.x});
+                points.push({
+                    x: p1.x + d1,
+                    y: p1.y
+                });
+                points.push({
+                    x: p1.x - d1,
+                    y: p1.y
+                });
+                points.push({
+                    y: p1.y + d1,
+                    x: p1.x
+                });
+                points.push({
+                    y: p1.y - d1,
+                    x: p1.x
+                });
 
                 // if we have at least 2 overlaps, then figure out where the
                 // set should be positioned analytically and try those too
                 for (var k = j + 1; k < overlap.length; ++k) {
                     var p2 = circles[overlap[k].set],
                         d2 = distanceFromIntersectArea(set.radius, p2.radius,
-                                                       overlap[k].size);
+                            overlap[k].size);
 
-                    var extraPoints = circleCircleIntersection(
-                        { x: p1.x, y: p1.y, radius: d1},
-                        { x: p2.x, y: p2.y, radius: d2});
+                    var extraPoints = circleCircleIntersection({
+                        x: p1.x,
+                        y: p1.y,
+                        radius: d1
+                    }, {
+                        x: p2.x,
+                        y: p2.y,
+                        radius: d2
+                    });
 
                     for (var l = 0; l < extraPoints.length; ++l) {
                         points.push(extraPoints[l]);
@@ -912,7 +1056,8 @@
 
             // we have some candidate positions for the set, examine loss
             // at each position to figure out where to put it at
-            var bestLoss = 1e50, bestPoint = points[0];
+            var bestLoss = 1e50,
+                bestPoint = points[0];
             for (j = 0; j < points.length; ++j) {
                 circles[setIndex].x = points[j].x;
                 circles[setIndex].y = points[j].y;
@@ -936,18 +1081,21 @@
         var output = 0;
 
         function getCircles(indices) {
-            return indices.map(function(i) { return sets[i]; });
+            return indices.map(function(i) {
+                return sets[i];
+            });
         }
 
         for (var i = 0; i < overlaps.length; ++i) {
-            var area = overlaps[i], overlap;
+            var area = overlaps[i],
+                overlap;
             if (area.sets.length == 1) {
                 continue;
             } else if (area.sets.length == 2) {
                 var left = sets[area.sets[0]],
                     right = sets[area.sets[1]];
                 overlap = circleOverlap(left.radius, right.radius,
-                                        distance(left, right));
+                    distance(left, right));
             } else {
                 overlap = intersectionArea(getCircles(area.sets));
             }
@@ -962,7 +1110,9 @@
     // orientates a bunch of circles to point in orientation
     function orientateCircles(circles, orientation, orientationOrder) {
         if (orientationOrder === null) {
-            circles.sort(function (a, b) { return b.radius - a.radius; });
+            circles.sort(function(a, b) {
+                return b.radius - a.radius;
+            });
         } else {
             circles.sort(orientationOrder);
         }
@@ -984,7 +1134,8 @@
         if (circles.length > 1) {
             var rotation = Math.atan2(circles[1].x, circles[1].y) - orientation,
                 c = Math.cos(rotation),
-                s = Math.sin(rotation), x, y;
+                s = Math.sin(rotation),
+                x, y;
 
             for (i = 0; i < circles.length; ++i) {
                 x = circles[i].x;
@@ -998,12 +1149,16 @@
         // first two circles
         if (circles.length > 2) {
             var angle = Math.atan2(circles[2].x, circles[2].y) - orientation;
-            while (angle < 0) { angle += 2* Math.PI; }
-            while (angle > 2*Math.PI) { angle -= 2* Math.PI; }
+            while (angle < 0) {
+                angle += 2 * Math.PI;
+            }
+            while (angle > 2 * Math.PI) {
+                angle -= 2 * Math.PI;
+            }
             if (angle > Math.PI) {
                 var slope = circles[1].y / (1e-10 + circles[1].x);
                 for (i = 0; i < circles.length; ++i) {
-                    var d = (circles[i].x + slope * circles[i].y) / (1 + slope*slope);
+                    var d = (circles[i].x + slope * circles[i].y) / (1 + slope * slope);
                     circles[i].x = 2 * d - circles[i].x;
                     circles[i].y = 2 * d * slope - circles[i].y;
                 }
@@ -1013,7 +1168,9 @@
 
     function disjointCluster(circles) {
         // union-find clustering to get disjoint sets
-        circles.map(function(circle) { circle.parent = circle; });
+        circles.map(function(circle) {
+            circle.parent = circle;
+        });
 
         // path compression step in union find
         function find(circle) {
@@ -1024,7 +1181,8 @@
         }
 
         function union(x, y) {
-            var xRoot = find(x), yRoot = find(y);
+            var xRoot = find(x),
+                yRoot = find(y);
             xRoot.parent = yRoot;
         }
 
@@ -1039,7 +1197,8 @@
         }
 
         // find all the disjoint clusters and group them together
-        var disjointClusters = {}, setid;
+        var disjointClusters = {},
+            setid;
         for (i = 0; i < circles.length; ++i) {
             setid = find(circles[i]).parent.setid;
             if (!(setid in disjointClusters)) {
@@ -1049,7 +1208,9 @@
         }
 
         // cleanup bookkeeping
-        circles.map(function(circle) { delete circle.parent; });
+        circles.map(function(circle) {
+            delete circle.parent;
+        });
 
         // return in more usable form
         var ret = [];
@@ -1064,30 +1225,43 @@
     function getBoundingBox(circles) {
         var minMax = function(d) {
             var hi = Math.max.apply(null, circles.map(
-                                    function(c) { return c[d] + c.radius; } )),
+                    function(c) {
+                        return c[d] + c.radius;
+                    })),
                 lo = Math.min.apply(null, circles.map(
-                                    function(c) { return c[d] - c.radius;} ));
-            return {max:hi, min:lo};
+                    function(c) {
+                        return c[d] - c.radius;
+                    }));
+            return {
+                max: hi,
+                min: lo
+            };
         };
 
-        return {xRange: minMax('x'), yRange: minMax('y')};
+        return {
+            xRange: minMax('x'),
+            yRange: minMax('y')
+        };
     }
 
     function normalizeSolution(solution, orientation, orientationOrder) {
-        if (orientation === null){
-            orientation = Math.PI/2;
+        if (orientation === null) {
+            orientation = Math.PI / 2;
         }
 
         // work with a list instead of a dictionary, and take a copy so we
         // don't mutate input
-        var circles = [], i, setid;
+        var circles = [],
+            i, setid;
         for (setid in solution) {
             if (solution.hasOwnProperty(setid)) {
                 var previous = solution[setid];
-                circles.push({x: previous.x,
-                              y: previous.y,
-                              radius: previous.radius,
-                              setid: setid});
+                circles.push({
+                    x: previous.x,
+                    y: previous.y,
+                    radius: previous.radius,
+                    setid: setid
+                });
             }
         }
 
@@ -1101,34 +1275,37 @@
             clusters[i].size = (bounds.xRange.max - bounds.xRange.min) * (bounds.yRange.max - bounds.yRange.min);
             clusters[i].bounds = bounds;
         }
-        clusters.sort(function(a, b) { return b.size - a.size; });
+        clusters.sort(function(a, b) {
+            return b.size - a.size;
+        });
 
         // orientate the largest at 0,0, and get the bounds
         circles = clusters[0];
         var returnBounds = circles.bounds;
 
-        var spacing = (returnBounds.xRange.max - returnBounds.xRange.min)/50;
+        var spacing = (returnBounds.xRange.max - returnBounds.xRange.min) / 50;
 
         function addCluster(cluster, right, bottom) {
             if (!cluster) return;
 
-            var bounds = cluster.bounds, xOffset, yOffset, centreing;
+            var bounds = cluster.bounds,
+                xOffset, yOffset, centreing;
 
             if (right) {
-                xOffset = returnBounds.xRange.max  - bounds.xRange.min + spacing;
+                xOffset = returnBounds.xRange.max - bounds.xRange.min + spacing;
             } else {
-                xOffset = returnBounds.xRange.max  - bounds.xRange.max;
+                xOffset = returnBounds.xRange.max - bounds.xRange.max;
                 centreing = (bounds.xRange.max - bounds.xRange.min) / 2 -
-                            (returnBounds.xRange.max - returnBounds.xRange.min) / 2;
+                    (returnBounds.xRange.max - returnBounds.xRange.min) / 2;
                 if (centreing < 0) xOffset += centreing;
             }
 
             if (bottom) {
-                yOffset = returnBounds.yRange.max  - bounds.yRange.min + spacing;
+                yOffset = returnBounds.yRange.max - bounds.yRange.min + spacing;
             } else {
-                yOffset = returnBounds.yRange.max  - bounds.yRange.max;
+                yOffset = returnBounds.yRange.max - bounds.yRange.max;
                 centreing = (bounds.yRange.max - bounds.yRange.min) / 2 -
-                            (returnBounds.yRange.max - returnBounds.yRange.min) / 2;
+                    (returnBounds.yRange.max - returnBounds.yRange.min) / 2;
                 if (centreing < 0) yOffset += centreing;
             }
 
@@ -1142,8 +1319,8 @@
         var index = 1;
         while (index < clusters.length) {
             addCluster(clusters[index], true, false);
-            addCluster(clusters[index+1], false, true);
-            addCluster(clusters[index+2], true, true);
+            addCluster(clusters[index + 1], false, true);
+            addCluster(clusters[index + 2], true, true);
             index += 3;
 
             // have one cluster (in top left). lay out next three relative
@@ -1163,7 +1340,8 @@
     a rectangle of width/height - with padding around the borders. also
     centers the diagram in the available space at the same time */
     function scaleSolution(solution, width, height, padding) {
-        var circles = [], setids = [];
+        var circles = [],
+            setids = [];
         for (var setid in solution) {
             if (solution.hasOwnProperty(setid)) {
                 setids.push(setid);
@@ -1171,18 +1349,18 @@
             }
         }
 
-        width -= 2*padding;
-        height -= 2*padding;
+        width -= 2 * padding;
+        height -= 2 * padding;
 
         var bounds = getBoundingBox(circles),
             xRange = bounds.xRange,
             yRange = bounds.yRange,
-            xScaling = width  / (xRange.max - xRange.min),
+            xScaling = width / (xRange.max - xRange.min),
             yScaling = height / (yRange.max - yRange.min),
             scaling = Math.min(yScaling, xScaling),
 
             // while we're at it, center the diagram too
-            xOffset = (width -  (xRange.max - xRange.min) * scaling) / 2,
+            xOffset = (width - (xRange.max - xRange.min) * scaling) / 2,
             yOffset = (height - (yRange.max - yRange.min) * scaling) / 2;
 
         var scaled = {};
@@ -1239,8 +1417,8 @@
             var solution = layoutFunction(data);
             if (normalize) {
                 solution = normalizeSolution(solution,
-                                             orientation,
-                                             orientationOrder);
+                    orientation,
+                    orientationOrder);
             }
             var circles = scaleSolution(solution, width, height, padding);
             var textCentres = computeTextCentres(circles, data);
@@ -1254,8 +1432,9 @@
 
             // to properly transition intersection areas, we need the
             // previous circles locations. load from elements
-            var previous = {}, hasPrevious = false;
-            svg.selectAll("g path").each(function (d) {
+            var previous = {},
+                hasPrevious = false;
+            svg.selectAll("g path").each(function(d) {
                 var path = d3Selection.select(this).attr("d");
                 if ((d.sets.length == 1) && path) {
                     hasPrevious = true;
@@ -1268,24 +1447,37 @@
             var pathTween = function(d) {
                 return function(t) {
                     var c = d.sets.map(function(set) {
-                        var start = previous[set], end = circles[set];
+                        var start = previous[set],
+                            end = circles[set];
                         if (!start) {
-                            start = {x : width/2, y : height/2, radius : 1};
+                            start = {
+                                x: width / 2,
+                                y: height / 2,
+                                radius: 1
+                            };
                         }
                         if (!end) {
-                            end = {x : width/2, y : height/2, radius : 1};
+                            end = {
+                                x: width / 2,
+                                y: height / 2,
+                                radius: 1
+                            };
                         }
-                        return {'x' : start.x * (1 - t) + end.x * t,
-                                'y' : start.y * (1 - t) + end.y * t,
-                                'radius' : start.radius * (1 - t) + end.radius * t};
+                        return {
+                            'x': start.x * (1 - t) + end.x * t,
+                            'y': start.y * (1 - t) + end.y * t,
+                            'radius': start.radius * (1 - t) + end.radius * t
+                        };
                     });
                     return intersectionAreaPath(c);
                 };
             };
 
             // update data, joining on the set ids
-            var nodes = svg.selectAll("g")
-                .data(data, function(d) { return d.sets; });
+            var nodes = svg.selectAll(".venn-area")
+                .data(data, function(d) {
+                    return d.sets;
+                });
 
             // create new nodes
             var enter = nodes.enter()
@@ -1301,42 +1493,60 @@
             var enterPath = enter.append("path"),
                 enterText = enter.append("text")
                 .attr("class", "label")
-                .text(function (d) { return label(d); } )
+                .text(function(d) {
+                    return label(d);
+                })
                 .attr("text-anchor", "middle")
                 .attr("dy", ".35em")
-                .attr("x", width/2)
-                .attr("y", height/2);
+                .attr("x", width / 2)
+                .attr("y", height / 2);
 
 
             // apply minimal style if wanted
             if (styled) {
                 enterPath.style("fill-opacity", "0")
-                    .filter(function (d) { return d.sets.length == 1; } )
-                    .style("fill", function(d) { return colours(label(d)); })
+                    .filter(function(d) {
+                        return d.sets.length == 1;
+                    })
+                    .style("fill", function(d) {
+                        return colours(label(d));
+                    })
                     .style("fill-opacity", ".25");
 
                 enterText
-                    .style("fill", function(d) { return d.sets.length == 1 ? colours(label(d)) : "#444"; });
+                    .style("fill", function(d) {
+                        return d.sets.length == 1 ? colours(label(d)) : "#444";
+                    });
             }
 
             // update existing, using pathTween if necessary
             var update = selection;
-            if (hasPrevious) {
+            if (false) { // hasPrevious) {
                 update = selection.transition("venn").duration(duration);
                 update.selectAll("path")
                     .attrTween("d", pathTween);
             } else {
                 update.selectAll("path")
                     .attr("d", function(d) {
-                        return intersectionAreaPath(d.sets.map(function (set) { return circles[set]; }));
+                        return intersectionAreaPath(d.sets.map(function(set) {
+                            return circles[set];
+                        }), circles);
                     });
             }
 
             var updateText = update.selectAll("text")
-                .filter(function (d) { return d.sets in textCentres; })
-                .text(function (d) { return label(d); } )
-                .attr("x", function(d) { return Math.floor(textCentres[d.sets].x);})
-                .attr("y", function(d) { return Math.floor(textCentres[d.sets].y);});
+                .filter(function(d) {
+                    return d.sets in textCentres;
+                })
+                .text(function(d) {
+                    return label(d);
+                })
+                .attr("x", function(d) {
+                    return Math.floor(textCentres[d.sets].x);
+                })
+                .attr("y", function(d) {
+                    return Math.floor(textCentres[d.sets].y);
+                });
 
             if (wrap) {
                 if (hasPrevious) {
@@ -1358,8 +1568,8 @@
                 .attrTween("d", pathTween);
 
             var exitText = exit.selectAll("text")
-                .attr("x", width/2)
-                .attr("y", height/2);
+                .attr("x", width / 2)
+                .attr("y", height / 2);
 
             // if we've been passed a fontSize explicitly, use it to
             // transition
@@ -1370,12 +1580,14 @@
             }
 
 
-            return {'circles': circles,
-                    'textCentres': textCentres,
-                    'nodes': nodes,
-                    'enter': enter,
-                    'update': update,
-                    'exit': exit};
+            return {
+                'circles': circles,
+                'textCentres': textCentres,
+                'nodes': nodes,
+                'enter': enter,
+                'update': update,
+                'exit': exit
+            };
         }
 
         function label(d) {
@@ -1475,7 +1687,7 @@
                 width = circles[data.sets[0]].radius || 50,
                 label = labeller(data) || '';
 
-                var words = label.split(/\s+/).reverse(),
+            var words = label.split(/\s+/).reverse(),
                 maxLines = 3,
                 minChars = (label.length + words.length) / maxLines,
                 word = words.pop(),
@@ -1508,13 +1720,14 @@
                 .attr("x", x)
                 .attr("y", y)
                 .attr("dy", function(d, i) {
-                     return (initial + i * lineHeight) + "em";
+                    return (initial + i * lineHeight) + "em";
                 });
         };
     }
 
     function circleMargin(current, interior, exterior) {
-        var margin = interior[0].radius - distance(interior[0], current), i, m;
+        var margin = interior[0].radius - distance(interior[0], current),
+            i, m;
         for (i = 1; i < interior.length; ++i) {
             m = interior[i].radius - distance(interior[i], current);
             if (m <= margin) {
@@ -1537,16 +1750,33 @@
     function computeTextCentre(interior, exterior) {
         // get an initial estimate by sampling around the interior circles
         // and taking the point with the biggest margin
-        var points = [], i;
+        var points = [],
+            i;
         for (i = 0; i < interior.length; ++i) {
             var c = interior[i];
-            points.push({x: c.x, y: c.y});
-            points.push({x: c.x + c.radius/2, y: c.y});
-            points.push({x: c.x - c.radius/2, y: c.y});
-            points.push({x: c.x, y: c.y + c.radius/2});
-            points.push({x: c.x, y: c.y - c.radius/2});
+            points.push({
+                x: c.x,
+                y: c.y
+            });
+            points.push({
+                x: c.x + c.radius / 2,
+                y: c.y
+            });
+            points.push({
+                x: c.x - c.radius / 2,
+                y: c.y
+            });
+            points.push({
+                x: c.x,
+                y: c.y + c.radius / 2
+            });
+            points.push({
+                x: c.x,
+                y: c.y - c.radius / 2
+            });
         }
-        var initial = points[0], margin = circleMargin(points[0], interior, exterior);
+        var initial = points[0],
+            margin = circleMargin(points[0], interior, exterior);
         for (i = 1; i < points.length; ++i) {
             var m = circleMargin(points[i], interior, exterior);
             if (m >= margin) {
@@ -1557,10 +1787,19 @@
 
         // maximize the margin numerically
         var solution = fmin(
-                    function(p) { return -1 * circleMargin({x: p[0], y: p[1]}, interior, exterior); },
-                    [initial.x, initial.y],
-                    {maxIterations:500, minErrorDelta:1e-10}).solution;
-        var ret = {x: solution[0], y: solution[1]};
+            function(p) {
+                return -1 * circleMargin({
+                    x: p[0],
+                    y: p[1]
+                }, interior, exterior);
+            }, [initial.x, initial.y], {
+                maxIterations: 500,
+                minErrorDelta: 1e-10
+            }).solution;
+        var ret = {
+            x: solution[0],
+            y: solution[1]
+        };
 
         // check solution, fallback as needed (happens if fully overlapped
         // etc)
@@ -1581,17 +1820,26 @@
 
         if (!valid) {
             if (interior.length == 1) {
-                ret = {x: interior[0].x, y: interior[0].y};
+                ret = {
+                    x: interior[0].x,
+                    y: interior[0].y
+                };
             } else {
                 var areaStats = {};
                 intersectionArea(interior, areaStats);
 
                 if (areaStats.arcs.length === 0) {
-                    ret = {'x': 0, 'y': -1000, disjoint:true};
+                    ret = {
+                        'x': 0,
+                        'y': -1000,
+                        disjoint: true
+                    };
 
                 } else if (areaStats.arcs.length == 1) {
-                    ret = {'x': areaStats.arcs[0].circle.x,
-                           'y': areaStats.arcs[0].circle.y};
+                    ret = {
+                        'x': areaStats.arcs[0].circle.x,
+                        'y': areaStats.arcs[0].circle.y
+                    };
 
                 } else if (exterior.length) {
                     // try again without other circles
@@ -1602,7 +1850,9 @@
                     // polygon. this should basically never happen
                     // and has some issues:
                     // https://github.com/benfred/venn.js/issues/48#issuecomment-146069777
-                    ret = getCenter(areaStats.arcs.map(function (a) { return a.p1; }));
+                    ret = getCenter(areaStats.arcs.map(function(a) {
+                        return a.p1;
+                    }));
                 }
             }
         }
@@ -1613,12 +1863,13 @@
     // given a dictionary of {setid : circle}, returns
     // a dictionary of setid to list of circles that completely overlap it
     function getOverlappingCircles(circles) {
-        var ret = {}, circleids = [];
+        var ret = {},
+            circleids = [];
         for (var circleid in circles) {
             circleids.push(circleid);
             ret[circleid] = [];
         }
-        for (var i  = 0; i < circleids.length; i++) {
+        for (var i = 0; i < circleids.length; i++) {
             var a = circles[circleids[i]];
             for (var j = i + 1; j < circleids.length; ++j) {
                 var b = circles[circleids[j]],
@@ -1636,9 +1887,12 @@
     }
 
     function computeTextCentres(circles, areas) {
-        var ret = {}, overlapped = getOverlappingCircles(circles);
+        var ret = {},
+            overlapped = getOverlappingCircles(circles);
         for (var i = 0; i < areas.length; ++i) {
-            var area = areas[i].sets, areaids = {}, exclude = {};
+            var area = areas[i].sets,
+                areaids = {},
+                exclude = {};
             for (var j = 0; j < area.length; ++j) {
                 areaids[area[j]] = true;
                 var overlaps = overlapped[area[j]];
@@ -1650,7 +1904,8 @@
                 }
             }
 
-            var interior = [], exterior = [];
+            var interior = [],
+                exterior = [];
             for (var setid in circles) {
                 if (setid in areaids) {
                     interior.push(circles[setid]);
@@ -1664,7 +1919,7 @@
                 console.log("WARNING: area " + area + " not represented on screen");
             }
         }
-        return  ret;
+        return ret;
     }
 
     // sorts all areas in the venn diagram, so that
@@ -1699,7 +1954,7 @@
         }
 
         // need to sort div's so that Z order is correct
-        div.selectAll("g").sort(function (a, b) {
+        div.selectAll("g").sort(function(a, b) {
             // highest order set intersections first
             if (a.sets.length != b.sets.length) {
                 return a.sets.length - b.sets.length;
@@ -1721,24 +1976,25 @@
         var ret = [];
         ret.push("\nM", x, y);
         ret.push("\nm", -r, 0);
-        ret.push("\na", r, r, 0, 1, 0, r *2, 0);
-        ret.push("\na", r, r, 0, 1, 0,-r *2, 0);
+        ret.push("\na", r, r, 0, 1, 0, r * 2, 0);
+        ret.push("\na", r, r, 0, 1, 0, -r * 2, 0);
         return ret.join(" ");
     }
 
     // inverse of the circlePath function, returns a circle object from an svg path
     function circleFromPath(path) {
         var tokens = path.split(' ');
-        return {'x' : parseFloat(tokens[1]),
-                'y' : parseFloat(tokens[2]),
-                'radius' : -parseFloat(tokens[4])
-                };
+        return {
+            'x': parseFloat(tokens[1]),
+            'y': parseFloat(tokens[2]),
+            'radius': -parseFloat(tokens[4])
+        };
     }
 
     /** returns a svg path of the intersection area of a bunch of circles */
-    function intersectionAreaPath(circles) {
+    function intersectionAreaPath(circles, allcircles) {
         var stats = {};
-        intersectionArea(circles, stats);
+        intersectionArea(circles, allcircles, stats);
         var arcs = stats.arcs;
 
         if (arcs.length === 0) {
@@ -1752,9 +2008,16 @@
             // draw path around arcs
             var ret = ["\nM", arcs[0].p2.x, arcs[0].p2.y];
             for (var i = 0; i < arcs.length; ++i) {
-                var arc = arcs[i], r = arc.circle.radius, wide = arc.width > r;
+                var arc = arcs[i],
+                    r = arc.circle.radius,
+                    wide = arc.width > r;
+               console.log(arc.within);
+               if(!arc.within)
+               ret.push("\nA", r, r, 0, 0, 0,
+                   arc.p1.x, arc.p1.y);
+                   else
                 ret.push("\nA", r, r, 0, wide ? 1 : 0, 1,
-                         arc.p1.x, arc.p1.y);
+                    arc.p1.x, arc.p1.y);
             }
             return ret.join(" ");
         }

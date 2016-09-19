@@ -100,8 +100,8 @@ var venn = venn || {'version' : '0.2.5'};
 
             // update existing
             var update = nodes.transition("venn").duration(hasPrevious ? duration : 0);
-            update.select("path")
-                .attrTween("d", pathTween);
+      //      update.select("path")
+      //          .attrTween("d", pathTween);
 
             var updateText = update.select("text")
                 .text(function (d) { return label(d); } )
