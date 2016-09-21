@@ -19,7 +19,7 @@ and (#dontmentionbrexit) provided for freedom of travel and freedom of trade:
 
 > It shall be lawful in future for any one, keeping loyalty to the Crown, to leave our kingdom and to return safely and securely, by land and by water. This is except in time of war, when men may go, only in the public interest, for some short period. (This excludes, always, those imprisoned or outlawed in accordance with the law of the realm, natives of any country at war with us, and merchants, who shall be treated as previously stated).
 
-Whilst the Magna Carta has had a fairly rocky 800 year history; being annulled within months of being issued, and many of the clauses being removed or softened over time it has not only shaped our liberal democracy, but (arguably) more importantly has started a shift from Customary Law to written Statutory Law with prescribed mechanisms for judgement and enforcement.  
+Whilst the Magna Carta has had a fairly rocky 800 year history; being annulled within months of being issued, and many of the clauses being removed or softened over time it has not only shaped our liberal democracy, but (arguably) more importantly has started a shift from Customary Law to written Statutory Law with prescribed mechanisms for judgment and enforcement.  
 
 In other words, it was a short document that transformed the governance of the country, or in the words of the Magna Carta itself initiated a "reform of our realm"
 
@@ -39,9 +39,7 @@ Most organisations today may not have banditry, but are operating much like coun
 
 <div style="clear:both;"/>
 
-Instead we are blessed with an Operating Model (because that is the name we give to these ways of workings) that is based on ideas from over a century ago, and is shared not as a document (which can be challenged and updated) but is transmitted culturally.
-
-I order to understand the organisations of today, it is worth understanding the key influences that made them the way they are - and which are unconsciously culturally transmitted (infected) from one generation to the next. Meet Frederick Taylor's "Principles of Scientific Management" and Max Weber's work on Bureaucracy:
+Instead we have inherited with an Operating Model (because that is the name we give to these ways of workings) that is based on ideas from over a century ago, and is shared not as a document (which can be challenged and updated) but is transmitted culturally. The  two main influences of todays organisations were Frederick Taylor's "Principles of Scientific Management" and Max Weber's work on Bureaucracy:
 
 Taylor advocated:
 
@@ -61,7 +59,9 @@ and Weber:
 
 [^weber]: Source: Boundless. “Weber's Model for Bureaucracy.” Boundless Sociology. Boundless, 08 Aug. 2016. Retrieved 31 Aug. 2016 from https://www.boundless.com/sociology/textbooks/boundless-sociology-textbook/social-groups-and-organization-6/bureaucracy-56/weber-s-model-for-bureaucracy-352-10202/
 
-Yet Weber also noted the dysfunctions of bureaucracy. Its major advantage, the calculability of results, also makes it unwieldy and even stultifying in dealing with individual cases.
+Yet Weber also noted the dysfunctions of bureaucracy;
+
+> "Its major advantage, the calculability of results, also makes it unwieldy and even stultifying in dealing with individual cases."
 
 Weber's ideal bureaucracy is characterized by the following:
 
@@ -72,12 +72,23 @@ Weber's ideal bureaucracy is characterized by the following:
 1. Rules implemented by neutral officials, and
 1. Career advancement depending on technical qualifications judged by organization, not individuals
 
+There is a great deal to like in these two visions of organistional operation. Indeed the first three of Taylor's points look pretty solid, as do the last three of Weber's ideals. Indeed a good case could be made that we don't do these things well enough in organisations today.
+
+The two traps that I think they lead us into however:
+
+1. **That managers and workers should be seperate**. It's been years since we lost the idea of blue collar and white collar staff, dressed differently, with fundemenatly different roles and privilages but the thinking behind it seems to remain in place. I think this is a legacy of manufacturing where there was an intrinsic seperation between the design and the production; there was literally no way that a worker on the Ford Mondeo production line could make a few tweaks and end up with a Focus instead. Regardless of how much autonomy you chose to gave workers about how they did their jobs, there was no wiggle room on what that produced. That distinction simply doesn't exist for modern information workers where it is rarely possible to meet an entire specification, and thus a key role of every "worker" is to bring their skill to bear in helping to decide what is possible, and to negotiate changes to what is required to make it more achievable. In this sense every worker is a manager too, and arguably the most useful managers are those who still do "real" work and are most connected to the practicilaties of delivering value.
+
+![cynefin](/assets/operating_model/cynefin.png){:style="float:right;clear:both;padding-bottom:10px;padding-left:10px;width:250px;"}
+
+1. **Action be pre-determined**.  Complexity theory gives us some very useful language to understand the applicability of Weber's second ideal. The application of pre-determined rules clearly relates to the *Obvious* quadrant of the [Cynefin model](https://www.youtube.com/watch?v=N7oz366X0-8), where we expect a *sense-categorise-respond* cycle which corresponds with rule-based activity. However as work becomes complicated and then complex we move to *sense-analyse-respond* (use skill over written rule) and *probe-sense-respond* (experiment) to choose our course of action.
+
+1. **That work can and should be partitioned**
 
 
 
 Questions:
-* Can you imagine beiong able to choose your line manager, or not even having one
-* Can you remember choosing what youwork on, rather than being told?
+* Can you imagine being able to choose your line manager, or not even having one
+* Can you remember choosing what you work on, rather than being told?
 
 Valve Operating Mode. Link
 
@@ -101,11 +112,13 @@ Options around:
 * Flow of work
 * Conflict resolution
 * Structure (but just one item)
-*
+
 represented in rules, norms, culture, etc.
 
+but it's not culture!
+
 The big quetsion today is whether we focus on the orgnisation with the people second, or the otehr way around.
-In the old model (theory X) we have to decide what is best for the organisation and then get people to confotm. In theory Y we figure out what is bets for people, and because they share the purpose of the organisation they will wnat to to the right thing for the organisation. With the former you have a busienss change battle of applying managaments will (which is getting harder and harder) and in the later, you don't.
+  In the old model (theory X) we have to decide what is best for the organisation and then get people to confotm. In theory Y we figure out what is bets for people, and because they share the purpose of the organisation they will wnat to to the right thing for the organisation. With the former you have a busienss change battle of applying managaments will (which is getting harder and harder) and in the later, you don't.
 
 So do we need an operating model?
 
@@ -119,7 +132,7 @@ diversity of views;
 
 link to complexity. hierarchilaist. grint
 
-
+What I want is for organisations to be explicit about their opertaing model. If they 
 
 s
 
