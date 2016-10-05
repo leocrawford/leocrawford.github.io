@@ -1521,7 +1521,7 @@
 
             // update existing, using pathTween if necessary
             var update = selection;
-            if (false) { // hasPrevious) {
+            if (false) { // FIXME hasPrevious) {
                 update = selection.transition("venn").duration(duration);
                 update.selectAll("path")
                     .attrTween("d", pathTween);
@@ -2011,14 +2011,15 @@
                 var arc = arcs[i],
                     r = arc.circle.radius,
                     wide = arc.width > r;
-               console.log(arc.within);
+               console.log(arc.width+","+r);
                if(!arc.within)
-               ret.push("\nA", r, r, 0, 0, 0,
+               ret.push("\nA", r, r, 0, wide ? 0 : 1, 0,
                    arc.p1.x, arc.p1.y);
                    else
                 ret.push("\nA", r, r, 0, wide ? 1 : 0, 1,
                     arc.p1.x, arc.p1.y);
             }
+            console.log(ret.join(" "));
             return ret.join(" ");
         }
     }

@@ -101,7 +101,7 @@
     }
 
     var simulation = d3.forceSimulation()
-        .force("charge", d3.forceManyBody(-30))
+    //    .force("charge", d3.forceManyBody(+10))
         .force("collide", d3.forceCollide(8))
         .force("x", d3.forceX(node => node.parent.data.x).strength(0.05))
         .force("y", d3.forceY(node => node.parent.data.y).strength(0.05))
