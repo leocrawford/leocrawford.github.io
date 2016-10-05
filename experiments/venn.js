@@ -359,20 +359,13 @@
     function intersectionArea(circles, allcircles, stats) {
         // get all the intersection points of the circles
 
-        var usecircles;
-        if (allcircles == null)
-            usecircles = circles;
-        else
-            usecircles = Object.keys(allcircles).map(e => allcircles[e]);
+        var usecircles = (allcircles == null) ? circles :
+            Object.keys(allcircles).map(e => allcircles[e]);
 
-        var intersectionPoints = getIntersectionPoints(usecircles);
+        var intrudecircles = usecircles.filter(x => circles.indexOf(x) == -1);
 
-        // filter out points that aren't included in all the circles
-        var innerPoints = intersectionPoints.filter(function(p) {
-            return containedInCircles(p, circles, usecircles)
-        });
-
-        console.log("" + circles.length + " gets " + innerPoints.length)
+        var contaningPoints = getIntersectionPoints(circles).filter(
+            p => containedInCircles(p, circles));
 
         var arcArea = 0,
             polygonArea = 0,
@@ -380,22 +373,72 @@
             i;
 
 
+        var innerPoints = getIntersectionPoints(usecircles);
+        // count how many edges on the intersection are bounding (ignoring those taht simply intrude)
+        innerPoints.forEach(p =>
+            p.containingArcs = [0, 1].map(b =>
+                circles.includes(usecircles[p.parentIndex[b]])
+            ).reduce((acc, cur) => cur ? acc + 1 : acc, 0)
+        );
+
+
+        if (circles.length == 1) {
+            console.log("Found 1");
+            console.log(circles);
+            console.log(innerPoints);
+        }
+
+        innerPoints = innerPoints.filter(p => containedInCircles(p, circles)).filter(p => containedInCircles(p, intrudecircles, false));
+
+
+        if (circles.length == 1) {
+            console.log("Reduced to");
+            console.log(innerPoints);
+        }
+
+        // usecircles.map(d => circles.includes(d))
 
         // if we have intersection points that are within all the circles,
         // then figure out the area contained by them
         if (innerPoints.length > 1) {
             // sort the points by angle from the center of the polygon, which lets
             // us just iterate over points to get the edges
-            var center = getCenter(innerPoints);
-            for (i = 0; i < innerPoints.length; ++i) {
-                var p = innerPoints[i];
-                p.angle = Math.atan2(p.x - center.x, p.y - center.y);
-            }
-            innerPoints.sort(function(a, b) {
-                return b.angle - a.angle;
+            var center = getCenter(contaningPoints);
+
+            innerPoints.forEach(p => p.angle = Math.atan2(p.x - center.x, p.y - center.y));
+            /*    innerPoints.forEach(p =>
+                if (circles.includes(usecircles[p.parentIndex[0]]) || circles.includes(usecircles[p.parentIndex[1]]))
+                    p.angle = Math.atan2(p.x - center.x, p.y - center.y)
+                else {
+                    p.pre =
+                }
+            );
+
+*/
+
+            /*     {
+                    if (circles.includes(usecircles[p.parentIndex[0]]) || circles.includes(usecircles[p.parentIndex[1]]))
+                        return Math.atan2(p.x - center.x, p.y - center.y);
+                else {
+                    ss
+                }
             });
 
+*/
 
+
+            innerPoints.sort((a, b) => b.angle - a.angle);
+
+
+
+
+
+            if (circles.length == 1) {
+                console.log(circles);
+                //      console.log(JSON.stringify(innerPoints.map(d => d.parentIndex.map(e => e == 0 ? "A" : e == 1 ? "B" : "C"))));
+                console.log(JSON.stringify(innerPoints.map(d => d.parentIndex.map(e => e == 0 ? "A" : e == 1 ? "B" : "C"))));
+
+            }
 
             // iterate over all points, get arc between the points
             // and update the areas
@@ -412,6 +455,8 @@
                         y: (p1.y + p2.y) / 2
                     },
                     arc = null;
+
+                //    console.log(JSON.stringify(midPoint));
 
                 for (var j = 0; j < p1.parentIndex.length; ++j) {
                     if (p2.parentIndex.indexOf(p1.parentIndex[j]) > -1) {
@@ -441,6 +486,7 @@
                                 width: width,
                                 p1: p1,
                                 p2: p2,
+                                center: center,
                                 within: circles.includes(circle)
                             };
                         }
@@ -448,6 +494,12 @@
                 }
 
                 if (arc !== null) {
+
+                    if (circles.length == 1) {
+                        console.log(JSON.stringify(p2.parentIndex.map(e => e == 0 ? "A" : e == 1 ? "B" : "C")) + "=>" + JSON.stringify(p1.parentIndex.map(e => e == 0 ? "A" : e == 1 ? "B" : "C")));
+                        console.log(JSON.stringify(arc));
+                    }
+
                     arcs.push(arc);
                     arcArea += circleArea(arc.circle.radius, arc.width);
                     p2 = p1;
@@ -501,14 +553,27 @@
             stats.polygonArea = polygonArea;
             stats.arcs = arcs;
             stats.innerPoints = innerPoints;
-            stats.intersectionPoints = intersectionPoints;
+            //      stats.intersectionPoints = intersectionPoints;
         }
 
         return arcArea + polygonArea;
     }
 
+    function containedInCircle(point, circle, tolerance) {
+        return distance(point, circle) <= (circle.radius + tolerance);
+    }
+
+    function containedInCircles(point, circles, every = true) {
+        if (every)
+        // check point is within all circles
+            return circles.every(circle => containedInCircle(point, circle, SMALL));
+        else
+        // check point is not within any circle
+            return !circles.some(circle => containedInCircle(point, circle, -SMALL));
+    }
+
     /** returns whether a point is contained by all of a list of circles */
-    function containedInCircles(point, circles, allcircles) {
+    function containedInCirclesOld(point, circles, allcircles) {
         for (var i = 0; i < allcircles.length; ++i) {
             var item = allcircles[i];
             if (circles.includes(item)) {
@@ -519,7 +584,7 @@
                 // console.log("" + item.x + " not in " + circles.map(d => d.x));
                 if (distance(point, item) < item.radius - SMALL) {
                     // console.log("drop"+point.x)
-                     return false;
+                    return false;
                 }
             }
         }
@@ -2011,15 +2076,15 @@
                 var arc = arcs[i],
                     r = arc.circle.radius,
                     wide = arc.width > r;
-               console.log(arc.width+","+r);
-               if(!arc.within)
-               ret.push("\nA", r, r, 0, wide ? 0 : 1, 0,
-                   arc.p1.x, arc.p1.y);
-                   else
-                ret.push("\nA", r, r, 0, wide ? 1 : 0, 1,
-                    arc.p1.x, arc.p1.y);
+                //     console.log(arc.width+","+r);
+                if (!arc.within)
+                    ret.push("\nA", r, r, 0, wide ? 0 : 1, 0,
+                        arc.p1.x, arc.p1.y);
+                else
+                    ret.push("\nA", r, r, 0, wide ? 1 : 0, 1,
+                        arc.p1.x, arc.p1.y);
             }
-            console.log(ret.join(" "));
+            //        console.log(ret.join(" "));
             return ret.join(" ");
         }
     }
