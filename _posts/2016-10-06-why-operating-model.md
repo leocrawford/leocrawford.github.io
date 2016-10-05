@@ -72,68 +72,18 @@ Weber's ideal bureaucracy is characterized by the following:
 1. Rules implemented by neutral officials, and
 1. Career advancement depending on technical qualifications judged by organization, not individuals
 
-There is a great deal to like in these two visions of organistional operation. Indeed the first three of Taylor's points look pretty solid, as do the last three of Weber's ideals. Indeed a good case could be made that we don't do these things well enough in organisations today.
+There is a great deal to like in these two visions of organistional operation. Indeed the first three of Taylor's points look pretty solid, as do the last three of Weber's ideals. A good case could be made that we don't do these things well enough in organisations today.
 
-The two traps that I think they lead us into however:
+The three traps that I think they lead us into however:
 
-1. **That managers and workers should be seperate**. It's been years since we lost the idea of blue collar and white collar staff, dressed differently, with fundemenatly different roles and privilages but the thinking behind it seems to remain in place. I think this is a legacy of manufacturing where there was an intrinsic seperation between the design and the production; there was literally no way that a worker on the Ford Mondeo production line could make a few tweaks and end up with a Focus instead. Regardless of how much autonomy you chose to gave workers about how they did their jobs, there was no wiggle room on what that produced. That distinction simply doesn't exist for modern information workers where it is rarely possible to meet an entire specification, and thus a key role of every "worker" is to bring their skill to bear in helping to decide what is possible, and to negotiate changes to what is required to make it more achievable. In this sense every worker is a manager too, and arguably the most useful managers are those who still do "real" work and are most connected to the practicilaties of delivering value.
+1. **That managers and workers should be seperate**. It's been years since we lost the idea of blue collar and white collar staff, dressed differently, with fundementaly different roles and privilages but the thinking behind it seems to remain in place. I think this is a legacy of manufacturing where there was an intrinsic seperation between the design and the production; there was literally no way that a worker on the Ford Mondeo production line could make a few tweaks and end up with a Focus instead. Regardless of how much autonomy you chose to gave workers about how they did their jobs, there was no wiggle room on what that produced. That distinction simply doesn't exist for modern information workers where it is rarely possible to meet an entire specification, and thus a key role of every "worker" is to bring their skill to bear in helping to decide what is possible, and to negotiate changes to what is required to make it more achievable. In this sense every worker is a manager too, and arguably the most useful managers are those who still do "real" work and are most connected to the practicalities of delivering value.
 
 ![cynefin](/assets/operating_model/cynefin.png){:style="float:right;clear:both;padding-bottom:10px;padding-left:10px;width:250px;"}
 
-1. **Action be pre-determined**.  Complexity theory gives us some very useful language to understand the applicability of Weber's second ideal. The application of pre-determined rules clearly relates to the *Obvious* quadrant of the [Cynefin model](https://www.youtube.com/watch?v=N7oz366X0-8), where we expect a *sense-categorise-respond* cycle which corresponds with rule-based activity. However as work becomes complicated and then complex we move to *sense-analyse-respond* (use skill over written rule) and *probe-sense-respond* (experiment) to choose our course of action.
+1. **Action can be pre-determined**.  Complexity theory gives us some very useful language to understand the applicability of Weber's second ideal. The application of pre-determined rules clearly relates to the *Obvious* quadrant of the [Cynefin model](https://www.youtube.com/watch?v=N7oz366X0-8), where we expect a *sense-categorise-respond* cycle which corresponds with rule-based activity. However as work becomes complicated and then complex we move to *sense-analyse-respond* (use skill over written rule) and *probe-sense-respond* (experiment) to choose our course of action.
 
-1. **That work can and should be partitioned**
+1. **That work can and should be partitioned**. One of the things that Systems Engineers get trained to do is splitting a problem up into "Mutually Exclusive, Collectively Exhaustive" parts. What they don't get trained to do is figure out what do do when that's not possible. Conversely Systems Thinking advocates looking at a system as a set of interconnected parts, which can't be easily split apart from each other. Again, context is everything. In the domain on the complicated (so-called "hard systems engineering") things can be split into parts (like a submarine is made of bits). In soft-systems approaches we look at things as ecosystems, which tend to be created through evolutionary approaches, and which can't be split down into its constituent parts without breaking it. Whilst it's possible to take a submarine to bits and put it together, you can't really do that with a bird or an ocean. It just doesn't make sense.  
 
+I hope that these three issues illustrate the fact that the way we run businesses is contextual; and that our changing problem means that todays organisations might need to adapt their models to suit their need. For example Amazon uses a hierarchial structure to manage their warehouses and distribution, but a network structure to manage their software development.
 
-
-Questions:
-* Can you imagine being able to choose your line manager, or not even having one
-* Can you remember choosing what you work on, rather than being told?
-
-Valve Operating Mode. Link
-
-We had an Operating Model that worked, but in order to become more agile we started breaking it. Change control. Review and approvals.
-
-Meta Governance.
-
-https://medium.com/@jurgenappelo/no-agile-does-not-scale-98df99da3ff3#.4lhklfpcu
-* "System laws suggest that shared rules (processes and tools) are crucial for the emergence of creative patterns at a larger scale. The question is, “Where do these rules come from?” Top-down processes and tools as imposed constraints are usually not agile, while emerging patterns of structured collaboration usually are. From a systems perspective, agility means bottom-up rules over top-down constraints."
-
-
-Organisations are not all the same; but most are quite similar.
-There are some near constants like hierarchy, often but not always with grades
-The one we recognise has a lot to do with Max Weber, and Taylor
-Whilst we find it hard to imagine any other way, these were big departures from the ways organisations were run previously.
-But they are not the only ways.
-Options around:
-* The way we make decisions
-* The way money flows
-* Prioritisation
-* Flow of work
-* Conflict resolution
-* Structure (but just one item)
-
-represented in rules, norms, culture, etc.
-
-but it's not culture!
-
-The big quetsion today is whether we focus on the orgnisation with the people second, or the otehr way around.
-  In the old model (theory X) we have to decide what is best for the organisation and then get people to confotm. In theory Y we figure out what is bets for people, and because they share the purpose of the organisation they will wnat to to the right thing for the organisation. With the former you have a busienss change battle of applying managaments will (which is getting harder and harder) and in the later, you don't.
-
-So do we need an operating model?
-
-We already have one, every organisatio does. It is just tacit (not written down) and is transmitted culturally.  So there are two questions do we want to be explicit about it, and do we want to change it?
-
-I'd suggest that if we think it's fit for purpose there is only marginal value in writing it down, but if we want to change it writing it down is a really helpful way to agree what we do and don't like about what we have now.
-
-competative pressures. where does talent want to work?
-
-diversity of views;
-
-link to complexity. hierarchilaist. grint
-
-What I want is for organisations to be explicit about their opertaing model. If they
-
-s
-
-> Rome was ruled by a king. However, social unrest and the pressure of external threats led in 510 BCE the last king to be deposed by a group of aristocrats led by Lucius Junius Brutus.[65][66] A new constitution was crafted, but the conflict between the ruling families (patricians) and the rest of the population, the plebeians continued. The plebs were demanding for definite, written, and secular laws. The patrician priests, who were the recorders and interpreters of the statutes, by keeping their records secret used their monopoly against social change. [https://en.wikipedia.org/wiki/History_of_democracy]
+To change our ways of working we first need to understand the assumptions and history of our current models so we know how to change them. It is for this reason that I advocate organisations trying to understand how their Operating Model works today, before they try and change it. And that having it in written form will both make it easier to change, but is also likely to make it clear how prosporous their model is for the challanges of today.
