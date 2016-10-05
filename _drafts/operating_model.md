@@ -9,11 +9,9 @@ title:  " Operating Model: The Magna Carta for Organisations?"
 
 ![magna carta picture](/assets/operating_model/magna_carta.jpg){:width="100%"}
 
-You've no doubt heard of the Mangna Carta (1215). It established the principle that the king was subject to and not above the law, enshrined the right of fair trial in law, standardised weights and measures..
+You've no doubt heard of the Mangna Carta (1215). It established the principle that the king was subject to and not above the law, enshrined the right of fair trial in law, standardised weights and measures[^weights] and (#dontmentionbrexit) provided for freedom of travel and freedom of trade:
 
-> There shall be one measure of wine, of ale and of corn (namely, “the London quarter”) throughout our whole realm. There shall also be one width of cloth (whether dyed, russet, or halberget): that is, two ells within the selvages. Let weights also be standardised similarly. [all translations from http://www.magnacartaplus.org/magnacarta/]
-
-and (#dontmentionbrexit) provided for freedom of travel and freedom of trade:
+[^weights]: There shall be one measure of wine, of ale and of corn (namely, “the London quarter”) throughout our whole realm. There shall also be one width of cloth (whether dyed, russet, or halberget): that is, two ells within the selvages. Let weights also be standardised similarly. [all translations from http://www.magnacartaplus.org/magnacarta/]
 
 > All merchants may leave or enter England in safety and security. They may stay and travel throughout England by road or by water, free from all illegal tolls, in order to buy and sell according to the ancient and rightful customs. This is except, in time of war, those merchants who are from the land at war with us. And if such merchants are found in our land at the beginning of the war, they shall be detained, without injury to their bodies or goods, until information is received by us (or by our chief justiciar) about in what way are treated our merchants, thence found in the land at war with us . If our men are safe there, the others shall be safe in our land.
 
@@ -21,7 +19,7 @@ and (#dontmentionbrexit) provided for freedom of travel and freedom of trade:
 
 Whilst the Magna Carta has had a fairly rocky 800 year history; being annulled within months of being issued, and many of the clauses being removed or softened over time it has not only shaped our liberal democracy, but (arguably) more importantly has started a shift from Customary Law to written Statutory Law with prescribed mechanisms for judgement and enforcement.  
 
-In other words, it was a short document that transformed the governance of the country, or in the words of the Magna Carta itself initiated a "reform of our realm"
+In other words, it was a short document that transformed the governance of the country; or in the words of the Magna Carta itself initiated a "reform of our realm"
 
 > ...and the advancement of the holy Church, and for the **reform of our realm**, by advice of our venerable fathers...
 
@@ -35,13 +33,11 @@ The impact was immense:
 
 ![MacLeod’s Archetypes](http://206hwf3fj4w52u3br03fi242.wpengine.netdna-cdn.com/wp-content/uploads/2009/10/hughMcLeodCompanyHierarchy.jpg){:style="float:right;clear:both;padding-bottom:10px;padding-left:10px;width:250px;"}
 
-Most organisations today may not have banditry, but are operating much like countries did before the Magna Carta (and the Yasak); the freedoms and responsibilities of individuals are passed down from one generation to the next, not shaped to solve the problems of the day, creating a competitive and political environment which serves neither the people who work in them, or those the organisation is meant to serve. Instead they often end up looking like MacLeod's Archetypes.
+Most organisations today may not have banditry, but are operating much like countries did before the Magna Carta (and the Yasak); the freedoms and responsibilities of individuals are passed down from one generation to the next rather than shaped to solve the problems of the day creating a competitive and political environment which serves neither the people who work in them, or those the organisation is meant to serve. For a disturbing picture of the sort of people that these organisations create check out MacLeod's Archetypes.
 
 <div style="clear:both;"/>
 
-Instead we are blessed with an Operating Model (because that is the name we give to these ways of workings) that is based on ideas from over a century ago, and is shared not as a document (which can be challenged and updated) but is transmitted culturally.
-
-I order to understand the organisations of today, it is worth understanding the key influences that made them the way they are - and which are unconsciously culturally transmitted (infected) from one generation to the next. Meet Frederick Taylor's "Principles of Scientific Management" and Max Weber's work on Bureaucracy:
+Today's organisations function instead using a legacy Operating Model (because that is the name we give to these ways of workings) that is based on ideas from over a century ago, and is shared not as a document (which can be challenged and updated) but is transmitted culturally. In order to understand today's orgainisations it is worth understanding the key influences that made them the way they are - and which are unconsciously culturally transmitted (infected) from one generation to the next. Meet Frederick Taylor's "Principles of Scientific Management" and Max Weber's work on Bureaucracy:
 
 Taylor advocated:
 
@@ -61,7 +57,7 @@ and Weber:
 
 [^weber]: Source: Boundless. “Weber's Model for Bureaucracy.” Boundless Sociology. Boundless, 08 Aug. 2016. Retrieved 31 Aug. 2016 from https://www.boundless.com/sociology/textbooks/boundless-sociology-textbook/social-groups-and-organization-6/bureaucracy-56/weber-s-model-for-bureaucracy-352-10202/
 
-Yet Weber also noted the dysfunctions of bureaucracy. Its major advantage, the calculability of results, also makes it unwieldy and even stultifying in dealing with individual cases.
+Yet Weber also noted the dysfunctions of bureaucracy; "Its major advantage, the calculability of results, also makes it unwieldy and even stultifying in dealing with individual cases".
 
 Weber's ideal bureaucracy is characterized by the following:
 
