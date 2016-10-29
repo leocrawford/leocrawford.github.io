@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Dynamic venn.js example</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="venn"></div>
+    <div style="float:left;padding:20px">
+        <table>
+            <tr>
+                <td>|A|</td>
+                <td>
+                    <input class="input-mini venn_area" id="A" type="number" value="16">
+                </td>
+            </tr>
+            <tr>
+                <td>|B|</td>
+                <td>
+                    <input class="input-mini venn_area" id="B" type="number" value="16">
+                </td>
+            </tr>
+            <tr>
+                <td>|C|</td>
+                <td>
+                    <input class="input-mini venn_area" id="C" type="number" value="12">
+                </td>
+            </tr>
+            <tr>
+                <td>|A&#8745B|</td>
+                <td>
+                    <input class="input-mini venn_area" id="A,B" type="number" value="4">
+                </td>
+            </tr>
+            <tr>
+                <td>|A&#8745C|</td>
+                <td>
+                    <input class="input-mini venn_area" id="A,C" type="number" value="4">
+                </td>
+            </tr>
+            <tr>
+                <td>|B&#8745C|</td>
+                <td>
+                    <input class="input-mini venn_area" id="B,C" type="number" value="3">
+                </td>
+            </tr>
+            <tr>
+                <td>|A&#8745B&#8745C|&nbsp</td>
+                <td>
+                    <input class="input-mini venn_area" id="A,B,C" type="number" value="2">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="clear: both;"></div>
+
+</body>
+<script src="/assets/js/d3.v4.min.js"></script>
+<script src="venn.js"></script>
+<script>
+    function getSetIntersections() {
+        areas = d3.selectAll("table .venn_area").nodes().map(
+            function(element) {
+                var size = parseFloat(element.value);
+                return {
+                    sets: element.id.split(","),
+                    size: size,
+                    children: fillArrayWithLetters(size, element.id.replace(/\,/g, ""))
+                };
+
+            });
+        return areas;
+
+        function fillArrayWithLetters(n, prefix) {
+            return Array.apply(null, Array(n)).map((x, i) => ({
+                name: prefix + i
+            }));
+        }
+    }
+
+
+    // draw the initial set
+    var chart = venn.VennDiagram()
+        .width(600)
+        .height(500);
+
+    function ticked() {
+        d3.select("svg").selectAll(".point")
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .style("fill", d => d.highlight ? "black" : getColour(d.parent.data))
+            .style("fill-opacity", d => d.highlight ? 1 : 0.6);
+    }
+
+    var simulation = d3.forceSimulation()
+        .force("collide", d3.forceCollide(8))
+        .force("x", d3.forceX(node => node.parent.data.centerx).strength(0.2))
+        .force("y", d3.forceY(node => node.parent.data.centery).strength(0.2))
+        .force("constrain", constrain())
+        .on("tick", ticked);
+
+    function constrain() {
+        var nodes;
+        var items = 6;
+        var r = 8;
+
+        function force(alpha) {
+            // for each circle let's check its inside its containing venn
+            for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
+                node = nodes[i];
+                var highlight = false;
+
+                // check for a bunch of points around the circumference of the circle
+                for (var it = 0; it < items; it++) {
+                    var x = node.x + node.vx + r * Math.cos(2 * Math.PI * it / items);
+                    var y = node.y + node.vy + r * Math.sin(2 * Math.PI * it / items);
+
+                    highlight = highlight || !d3.polygonContains(
+                        node.parent.data.shape, [x, y])
+                }
+                node.highlight = highlight;
+
+                if (node.highlight) {
+                    node.x = node.x + (node.parent.data.x - node.x) / 4;
+                    node.y = node.y + (node.parent.data.y - node.y) / 4;
+                }
+            }
+        }
+
+        force.initialize = function(_) {
+            nodes = _;
+        }
+        return force;
+    }
+
+    var setIntersections;
+
+    // initial draw
+    recalc();
+    // redraw the sets on any change in input
+    d3.selectAll("input").on("change", recalc);
+
+    function recalc() {
+        setIntersections = getSetIntersections();
+        d3.select("#venn").datum(setIntersections).call(chart).call(update);
+    }
+
+
+
+    d3.selectAll("#venn .venn-circle path")
+        .style("fill-opacity", 0.2)
+        .style("fill", d => getColour(d))
+        .style("stroke-width", 0)
+
+    d3.selectAll("#venn .venn-intersection path")
+        .style("fill-opacity", 0.4)
+        .style("stroke-width", 0)
+        .style("fill", d => getColour(d))
+        .style("stroke", "black");
+
+
+    d3.selectAll("#venn .venn-circle").selectAll("text")
+        .style("font-size", "32px")
+        .style("font-weight", "100");
+
+    function getColour(d) {
+        return "#" + (d.sets.indexOf("A") >= 0 ? "FF" : "00") + (d.sets.indexOf("B") >= 0 ? "FF" : "00") + (d.sets.indexOf("C") >= 0 ? "FF" : "00");
+    }
+
+
+    function dragstarted(d) {
+        if (!d3.event.active) {
+            simulation.alphaTarget(0.3).restart();
+        }
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+
+    function update() {
+        d3.selectAll("#venn .venn-area")
+            .each(setPx)
+            .each(setPy)
+            .each(setPShape);
+
+        simulation
+            .nodes(addPoints())
+            .alpha(1)
+            .restart()
+    }
+
+    function addPoints() {
+        var hierarchy = d3.hierarchy(setIntersections,
+            d => (typeof d.children == "undefined") ? d : d.children)
+        var nodes = hierarchy.leaves();
+
+        // make sure there is a <g> points
+        d3.selectAll("#venn svg").selectAll(".points")
+            .data([null]).enter().append("g")
+            .attr("class", "points")
+            .style("fill-opacity", 0.6)
+            //      .style("fill",d=> getColour(d))
+            .style("stroke-width", 0.1)
+            .style("stroke", "black");
+
+
+        var points = d3.select(".points");
+
+        var datapoints = points.selectAll(".point")
+            .data(nodes, d => d.data.name);
+
+        // lets copy the current x and y value back from object to data so that
+        // the simulation carries on rather than restarting
+        datapoints.each(function(d, i) {
+            d.x = this.cx.animVal.value;
+            d.y = this.cy.animVal.value;
+        });
+
+        var node = datapoints.enter()
+            .append("circle")
+            .attr("class", "point")
+            .attr("r", 8)
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+
+
+        datapoints.exit().remove();
+        return nodes;
+    }
+
+    function bbox(t) {
+        return t.firstChild.getBBox();
+    }
+
+    function setPx(d) {
+        d.x = bbox(this).x + bbox(this).width / 2;
+    }
+
+    function setPy(d) {
+        d.y = bbox(this).y + bbox(this).height / 2;
+    }
+
+
+    function setPShape(d) {
+        var path = this.firstChild;
+
+        var length = path.getTotalLength();
+        var polygon = [];
+        for (var loop = 0; loop < length; loop += length / 100) {
+            var sample = path.getPointAtLength(loop);
+            polygon.push([sample.x, sample.y]);
+        }
+        d.shape = polygon;
+
+        var bbox = path.getBBox();
+        d.centerx = Math.floor(bbox.x + bbox.width / 2.0);
+        d.centery = Math.floor(bbox.y + bbox.height / 2.0);
+    }
+</script>
+
+</html>
