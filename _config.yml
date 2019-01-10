@@ -23,6 +23,6 @@ github_username:  leocrawford
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-hacker
+theme: jekyll-theme-minima
 plugins:
   - jekyll-gist
