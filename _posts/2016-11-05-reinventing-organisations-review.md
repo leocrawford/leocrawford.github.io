@@ -14,20 +14,20 @@ Even looking back over the 15 or so years I've been at work I can see a transiti
 
 The next state is called “Evolutionary teal” and is where I guess the book will divide readers. Up until now the point has been (somewhat indisputably) that have had several different paradigms for organising ourselves, not just the current one, which helps make it more transient.. Teal is described (in detail, and in contrast to orange and green) using topics such as:
 
-* organisational structure
-* stuff functions
-* coordination
-* projects
-* decision making
-* information flow
-* conflict resolution
-* performance management
-* compensation
-* dismissal
+- organisational structure
+- stuff functions
+- coordination
+- projects
+- decision making
+- information flow
+- conflict resolution
+- performance management
+- compensation
+- dismissal
 
 In one sense the discussion around each of these topics is not particularly novel for those that have heard about Gore, Semco, Zappos, etc. but what the book does is a) give a convincing description of the faults of the current normal paradigm, b) convince you (through several different examples) that there are different ways and c) pull the changes into a coherent framework.
 
-I would love to retell the stories here, but I don't think I'll do the book credit. Instead I'll provide a couple of quotes and leave you to read the book, and if you don't have time to do that at least watch the youtube video ( https://youtu.be/gcS04BI2sbk)
+I would love to retell the stories here, but I don't think I'll do the book credit. Instead I'll provide a couple of quotes and leave you to read the book, and if you don't have time to do that at least watch the youtube video (https://youtu.be/gcS04BI2sbk)
 
 “If the notion of trusting the collective intelligence of a system seems risky or outright foolish, think about this: the idea that a country’s economy would best be run by the heavy hand of central planning committees in Soviet style has been totally discredited. We all know that a free-market system where a myriad of players pick up on signals, make decisions, and coordinate among themselves works much better. Yet for some strange reason, inside organizations, we still trust the equivalent of central planning committees. Self-management brings the principles that account for successful free-market economies inside organizations.”
 
@@ -41,4 +41,4 @@ I would love to retell the stories here, but I don't think I'll do the book cred
 
 "targets are problematic for at least three reasons: they rest on the assumption that we can predict the future, they skew our behavior away from inner motivation, and they tend to narrow our capacity to sense new possibilities."
 
-For those that have some natural scepticism about this (which I think it's important to retain) the most important point made time and time again in the book, is that this isn't about anarchy or chaos. Everything is still managed, it's just that the way those things are managed is mostly not about command and control but instead about social institutions. By way of example is someone likely to work harder to meat a goal set in their annual objectives or to keep a promise they made personally to a colleague? For me the answer is obvious, and that is really the message of the book – one organisational function at a time.
+For those that have some natural scepticism about this (which I think it's important to retain) the most important point made time and time again in the book, is that this isn't about anarchy or chaos. Everything is still managed, it's just that the way those things are managed is mostly not about command and control but instead about social institutions. By way of example is someone likely to work harder to meet a goal set in their annual objectives or to keep a promise they made personally to a colleague? For me the answer is obvious, and that is really the message of the book – one organisational function at a time.
