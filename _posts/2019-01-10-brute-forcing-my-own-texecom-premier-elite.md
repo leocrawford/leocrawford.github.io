@@ -1,6 +1,6 @@
-![Pi connected to texecom alarm picture](/assets/alarm/texecom.png){:width="100%"}
+![Wintex running on Linux](/assets/alarm/texecom.png){:width="100%"}
 
-I live in a new build house, which came with a Texecom Elite 48 alarm system fitted. After a couple of years of use I got an error code I couldn't reset with my "master user" code. A few emails to the company who installed the alarm let me know that they had helpfully not handed over the alarm when they comissioned the system, and then deleted the code when I didn't pay for extended service. Not impressed!
+I live in a new build house, which came with a Texecom Elite 48 alarm system fitted. After a couple of years of use I got an error code I couldn't reset with my "master user" code. A few emails to the company who installed the alarm let me know that they had helpfully not handed over the alarm when they commissioned the system, and then deleted the code when I didn't pay for extended service. Not impressed!
 
 They let me know they could come out (for a big fee) and reset the entire alarm system, including the codes. By this point though I was grumpy with them, and determined to show them there was an alternative. What I really wanted to do was email them and tell them the code _they_ had set on _my_ system.
 
@@ -74,6 +74,6 @@ I must admit I logged in and out a few times to prove I had it, before taking gr
 
 It was just a matter now if tidying up. I changed the codes and a few settings. Ordered some unofficial proximity tags (now I had full control of my own system) and reset the warnings. I also decided that I'd like to keep remote control of my alarm so decided to keep the raspberry pi connected. I gently closed the case over the FTDI cable (which was tricky) and left it hanging. I also installed Wintex on Linux using wine and playonlinux (no problems).
 
-That's pretty much it. I plan to go back and test the GPIO pins again and see if i can liberate my FTDI cable, and ideally I'd draw power from the 12v inside the alarm so I can leave the pi inside rather than outside the case. I've ordered a 12v to 5v adapter for a couple of quid to do that with.
+That's pretty much it. I plan to go back and test the GPIO pins again and see if i can liberate my FTDI cable, and ideally I'd draw power from the 12v inside the alarm so I can leave the pi inside rather than outside the case. (I've ordered a 12v to 5v adapter for a couple of quid to do that with)
 
 Ideally I'd like to remotely monitor the alarm from my phone, but that's a whole new challenge.
