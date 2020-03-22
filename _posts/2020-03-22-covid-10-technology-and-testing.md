@@ -1,8 +1,3 @@
----
-layout: post
-title:  "COVID-19: Is there an exit Strategy? Why testing and tehcnology might work"
----
-
 # COVID-19: Is there an exit Strategy? Why testing and tehcnology might work.
 
 The BBC [reported](https://www.bbc.co.uk/news/health-51963486) that:
