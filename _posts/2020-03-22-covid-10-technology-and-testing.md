@@ -1,10 +1,7 @@
 ---
 layout: post
-title:  "COVID-19: Is there an exit Strategy? Why testing and tehcnology might work."
-date:   2020-03-22 21:21:00 +0100
-categories: covid-19
+title:  "COVID-19: Is there an exit Strategy? Why testing and tehcnology might work"
 ---
-
 
 # COVID-19: Is there an exit Strategy? Why testing and tehcnology might work.
 
