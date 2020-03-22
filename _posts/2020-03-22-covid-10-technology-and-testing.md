@@ -3,7 +3,7 @@ layout: default
 title:  "COVID-19: Why testing and tehcnology might be an exit strategy"
 ---
 
-# COVID-19: Is there an exit Strategy? Why testing and tehcnology might work.
+# COVID-19: Why testing and tehcnology might be an exit strategy
 
 The BBC [reported](https://www.bbc.co.uk/news/health-51963486) that:
 

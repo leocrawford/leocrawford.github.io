@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title:  "Operating Model: The Magna Carta for Organisations?"
 date:   2016-10-06 13:31:25 +0100
 categories: organisations

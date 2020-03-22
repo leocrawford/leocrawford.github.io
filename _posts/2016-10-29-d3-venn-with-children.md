@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title:  "D3 Venn with Constrained Children"
 # date:   2016-10-06 13:31:25 +0100
 # categories: code, d3
