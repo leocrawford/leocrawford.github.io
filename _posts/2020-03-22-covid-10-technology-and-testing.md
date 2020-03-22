@@ -1,6 +1,6 @@
 ---
-layout: post
-title:  "COVID-19: Is there an exit Strategy? Why testing and tehcnology might work"
+layout: default
+title:  "COVID-19: Why testing and tehcnology might be an exit strategy"
 ---
 
 # COVID-19: Is there an exit Strategy? Why testing and tehcnology might work.
