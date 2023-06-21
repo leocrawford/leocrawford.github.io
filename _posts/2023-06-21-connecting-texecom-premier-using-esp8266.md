@@ -21,14 +21,14 @@ Via a lot of web searching (and not a little trial and error with aliexpress ord
 ![esp12e](https://github.com/leocrawford/leocrawford.github.io/assets/915016/e3941e86-c25b-4178-912a-a555a75da22d)
 
 It only [costs £4.60]([url](https://www.ebay.co.uk/itm/203202954420)https://www.ebay.co.uk/itm/203202954420) but it has an onboard powered converter allowing it to be powerd over 12V (which the texecom premier provides on the COM port) 
-and also has a built in level shifter allowing the UART pins to be 3v or 5v. Now I have a single piece of hardware that can be connected directly into my alarm with no trailing cables, power adapaters or level converters.
+and also has a built in level shifter allowing the UART pins to be 3v or 5v. Now I have a single piece of hardware that can be connected directly into my alarm with no trailing cables, power adapaters or level shifter.
 
 However I was aware that I still only had one COM port connected (and the ESP8266 can only run one UART using hardware) so what to do? I could have looked at 
 ESP32s but then my hunt for the perfect piece of gear would start over (and I must have already spent more with aliexpress than just buying the official Wifi adapter from texecom) so I turned to software. I found some bit banging code and was
 contemplating merging it into esp-link (which I realised hadn't bene updated for three years) when I came across [esphome]([url](https://esphome.io/)https://esphome.io/) which has 
 built in [UART support]([url](https://esphome.io/components/uart.html)https://esphome.io/components/uart.html) and a number of different stream-servers that
 relay this serial connection over wifi. I experimented with a few, which either didn't support ESP2866 or didn't seem to permit multiple UART connections - but finally found [this one]([url](https://github.com/2QT-Lexi/esphome-stream-server-v2)).
-U used HASS to create a new esphome device, and configured it like this..
+I used HASS to create a new esphome device, and configured it like this..
 
 ````
 esphome:
@@ -96,3 +96,40 @@ wifi:
 captive_portal:
     
 ````
+
+It seems that esphome is smart enough to drop back to software (bit banging) for the second UART connection (which I chose to be the one I use infrequently for wintex, not the always connected HASS connection).  Part of my logs now show my device has started up, and using the UART pins I specified has exposed both over two different ports
+
+````
+[13:42:41][C][uart.arduino_esp8266:103]:   TX Pin: GPIO1
+[13:42:41][C][uart.arduino_esp8266:104]:   RX Pin: GPIO3
+[13:42:41][C][uart.arduino_esp8266:106]:   RX Buffer Size: 256
+[13:42:41][C][uart.arduino_esp8266:108]:   Baud Rate: 19200 baud
+[13:42:41][C][uart.arduino_esp8266:109]:   Data Bits: 8
+[13:42:41][C][uart.arduino_esp8266:110]:   Parity: NONE
+[13:42:41][C][uart.arduino_esp8266:111]:   Stop bits: 2
+[13:42:41][C][uart.arduino_esp8266:113]:   Using hardware serial interface.
+[13:42:41][C][uart.arduino_esp8266:102]: UART Bus:
+[13:42:41][C][uart.arduino_esp8266:103]:   TX Pin: GPIO4
+[13:42:41][C][uart.arduino_esp8266:104]:   RX Pin: GPIO5
+[13:42:41][C][uart.arduino_esp8266:106]:   RX Buffer Size: 256
+[13:42:41][C][uart.arduino_esp8266:108]:   Baud Rate: 19200 baud
+[13:42:41][C][uart.arduino_esp8266:109]:   Data Bits: 8
+[13:42:41][C][uart.arduino_esp8266:110]:   Parity: NONE
+[13:42:41][C][uart.arduino_esp8266:111]:   Stop bits: 2
+[13:42:41][C][uart.arduino_esp8266:115]:   Using software serial
+[13:42:41][C][captive_portal:088]: Captive Portal:
+[13:42:41][C][mdns:108]: mDNS:
+[13:42:41][C][mdns:109]:   Hostname: alarm-link
+[13:42:41][C][ota:093]: Over-The-Air Updates:
+[13:42:41][C][ota:094]:   Address: alarm-link.local:8266
+[13:42:41][C][ota:097]:   Using Password.
+[13:42:41][C][api:138]: API Server:
+[13:42:41][C][api:139]:   Address: alarm-link.local:6053
+[13:42:41][C][api:141]:   Using noise encryption: YES
+[13:42:41][C][streamserver:110]: Stream Server:
+[13:42:41][C][streamserver:111]:   Address: 192.168.1.115:6638
+[13:42:41][C][streamserver:110]: Stream Server:
+[13:42:41][C][streamserver:111]:   Address: 192.168.1.115:6639
+````
+
+Success. I now have a single cheap device tucked inside teh alarm case, with two COM ports wired up, and power drawn from the alarm itself. So far it has been 100% stable and I can manage it remotely (including reflashing) if I need. 
