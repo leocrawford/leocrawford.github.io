@@ -1,4 +1,3 @@
-![PXL_20230621_132457686](https://github.com/leocrawford/leocrawford.github.io/assets/915016/1caecaf5-8554-49e9-a98a-16103b61bf98)
 ![PXL_20230621_132420915](https://github.com/leocrawford/leocrawford.github.io/assets/915016/1fd32687-e637-4233-84fb-bf53f34fa555)
 
 For some time I have been using a Raspberry Pi Zero W to run `ser2net` relaying the COM port of my Texecom Premier Elite 48 over wifi
