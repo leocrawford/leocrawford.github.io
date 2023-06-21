@@ -1,5 +1,8 @@
-For some time I have been using a Raspberry Pi Zero W to run `ser2net`, relaying the COM port of my Texecom Premier Elite 48 over Wifi - 
-so that I can connect Wintex remotely. Latterly I have moved to using home assistant to automate my alarm using [this excellent HA add-on](https://hub.docker.com/r/dchesterton/texecom2mqtt). 
+![PXL_20230621_132457686](https://github.com/leocrawford/leocrawford.github.io/assets/915016/1caecaf5-8554-49e9-a98a-16103b61bf98 | width=100)
+![PXL_20230621_132420915](https://github.com/leocrawford/leocrawford.github.io/assets/915016/1fd32687-e637-4233-84fb-bf53f34fa555 | width=100)
+
+For some time I have been using a Raspberry Pi Zero W to run `ser2net` relaying the COM port of my Texecom Premier Elite 48 over wifi
+so that I can connect wintex remotely. Latterly I have moved to using home assistant to automate my alarm using [this excellent HA add-on](https://hub.docker.com/r/dchesterton/texecom2mqtt). 
 I must say this is awesome; now I can alert my phone if the alarm goes off, and auto arm (and disarm) as I enter/leave the house.
 
 However I have been dis-satisfied with the raspberry pi solution for a few reasons:
@@ -11,7 +14,7 @@ However I have been dis-satisfied with the raspberry pi solution for a few reaso
 5. Ideally I'd be able to connect two COM ports so I can use wintex and HA at the same time
 
 Inspired by Rogan Dawes in various posts including [this]([url](https://community.home-assistant.io/t/integrating-texecom-premier-alarm-panels-via-esphome-using-wintex-protocol/330396)https://community.home-assistant.io/t/integrating-texecom-premier-alarm-panels-via-esphome-using-wintex-protocol/330396)
-and [this]([url](https://community.home-assistant.io/t/texecom-alarm-panel/40561/54)https://community.home-assistant.io/t/texecom-alarm-panel/40561/54) I decided to duip my toe into 
+and [this]([url](https://community.home-assistant.io/t/texecom-alarm-panel/40561/54)https://community.home-assistant.io/t/texecom-alarm-panel/40561/54) I decided to dip my toe into 
 embedded devices. I bought a few ESP2866 (because they were cheap) and quickly got started with [esp-link]([url](https://github.com/jeelabs/esp-link)https://github.com/jeelabs/esp-link) which was
 really easy and effective. However the little dev boards I had were still powered over USB, weren't specified for 5v UART (though they did seem to work) and 
 I still only had one COM port connected.
@@ -20,7 +23,7 @@ Via a lot of web searching (and not a little trial and error with aliexpress ord
 
 ![esp12e](https://github.com/leocrawford/leocrawford.github.io/assets/915016/e3941e86-c25b-4178-912a-a555a75da22d)
 
-It only [costs £4.60]([url](https://www.ebay.co.uk/itm/203202954420)https://www.ebay.co.uk/itm/203202954420) but it has an onboard powered converter allowing it to be powerd over 12V (which the texecom premier provides on the COM port) 
+It only [costs £4.60]([url](https://www.ebay.co.uk/itm/203202954420)https://www.ebay.co.uk/itm/203202954420) but it has an onboard power converter allowing it to be powered over 12V (which the texecom premier provides on the COM port) 
 and also has a built in level shifter allowing the UART pins to be 3v or 5v. Now I have a single piece of hardware that can be connected directly into my alarm with no trailing cables, power adapaters or level shifter.
 
 However I was aware that I still only had one COM port connected (and the ESP8266 can only run one UART using hardware) so what to do? I could have looked at 
@@ -132,4 +135,4 @@ It seems that esphome is smart enough to drop back to software (bit banging) for
 [13:42:41][C][streamserver:111]:   Address: 192.168.1.115:6639
 ````
 
-Success. I now have a single cheap device tucked inside teh alarm case, with two COM ports wired up, and power drawn from the alarm itself. So far it has been 100% stable and I can manage it remotely (including reflashing) if I need. 
+Success. I now have a single cheap device tucked inside the alarm case, with two COM ports wired up, and power drawn from the alarm itself. So far it has been 100% stable and I can manage it remotely (including reflashing) if I need. 
