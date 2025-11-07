@@ -26,10 +26,10 @@ ZHA loaded the device using the generic Tuya TS0601 handler, but no climate cont
 
 Home Assistant logs were silent about quirk application:
 
-\`\`\`
+```
 Device: _TZE204_xalsoe3m TS0601  
 Quirk: zigpy.device.Device
-\`\`\`
+```
 
 It was time to make my own.
 
@@ -41,7 +41,7 @@ It was time to make my own.
 
 Using ZHA’s device info dump:
 
-\`\`\`json
+```json
 {
   "manufacturer": "_TZE204_xalsoe3m",
   "model": "TS0601",
@@ -54,7 +54,7 @@ Using ZHA’s device info dump:
     }
   }
 }
-\`\`\`
+```
 
 This confirmed it was a Tuya MCU device using the **EF00** cluster.
 
@@ -64,15 +64,15 @@ This confirmed it was a Tuya MCU device using the **EF00** cluster.
 
 Custom quirks live under:
 
-\`\`\`
+```
 /config/custom_zha_quirks/tuya/
-\`\`\`
+```
 
 I started with a minimal working version of `tuya_thermostat.py` that matched the fingerprint and confirmed it loaded:
 
-\`\`\`
+```
 Loaded custom quirks. Please contribute them to https://github.com/zigpy/zha-device-handlers
-\`\`\`
+```
 
 That first milestone meant: ✅ my code was being loaded.
 
@@ -84,7 +84,7 @@ Tuya thermostats expose data via *datapoints (DPs)* rather than standard attribu
 
 To debug, I instrumented the MCU cluster:
 
-\`\`\`python
+```python
 def _dp_2_attr_update(self, dp_value):
     import logging
     logger = logging.getLogger("tuya.tuya_thermostat")
@@ -93,23 +93,23 @@ def _dp_2_attr_update(self, dp_value):
     raw_bytes = getattr(tuya_data, "data", None)
     decoded = getattr(tuya_data, "as_value", raw_bytes)
     logger.warning(f"[DP→Attr] {self.endpoint.device.manufacturer} dp={dp_id} decoded={decoded}")
-\`\`\`
+```
 
 This produced live logs of all Tuya datapoints:
 
-\`\`\`
+```
 [DP→Attr] _TZE204_xalsoe3m dp=18 decoded=2100  
 [DP→Attr] _TZE204_xalsoe3m dp=50 decoded=2000
-\`\`\`
+```
 
 From this, I discovered:
 
-| DP | Meaning | Notes |
-|----|----------|-------|
-| 16 | Actual temperature (°C × 10) |
-| 18 | Room temperature sensor value |
-| 40 | Child lock (bool) |
-| 50 | Setpoint temperature (°C × 100 scaling confirmed) |
+| DP  | Meaning                         | Notes                    |
+|-----|---------------------------------|--------------------------|
+| 16  | Actual temperature (°C × 10)    |                          |
+| 18  | Room temperature sensor value    |                          |
+| 40  | Child lock (bool)               |                          |
+| 50  | Setpoint temperature (°C × 100 scaling confirmed) |    |
 
 That meant the scaling was **10× off** in my first attempt!
 
@@ -119,7 +119,7 @@ That meant the scaling was **10× off** in my first attempt!
 
 After trial and error, and comparing with **Zigbee2MQTT’s Moes ZHT-002 mapping**, I confirmed:
 
-\`\`\`python
+```python
 .tuya_dp(
     dp_id=16,
     ep_attribute=TuyaThermostat.ep_attribute,
@@ -133,7 +133,7 @@ After trial and error, and comparing with **Zigbee2MQTT’s Moes ZHT-002 mapping
     converter=lambda x: x // 10,
     dp_converter=lambda x: x * 10,
 )
-\`\`\`
+```
 
 This finally produced working temperature reporting and adjustable setpoints within Home Assistant.
 
@@ -157,7 +157,7 @@ These are declared using `.tuya_switch()`, `.tuya_enum()`, and `.tuya_number()` 
 
 Here’s the simplified working core for `_TZE204_xalsoe3m`:
 
-\`\`\`python
+```python
 (
     TuyaQuirkBuilder("_TZE204_xalsoe3m", "TS0601")
     .tuya_dp(16,
@@ -199,7 +199,7 @@ Here’s the simplified working core for `_TZE204_xalsoe3m`:
     .skip_configuration()
     .add_to_registry()
 )
-\`\`\`
+```
 
 ---
 
@@ -207,9 +207,9 @@ Here’s the simplified working core for `_TZE204_xalsoe3m`:
 
 After restarting Home Assistant, ZHA loaded:
 
-\`\`\`
+```
 Quirk: zhaquirks.tuya.tuya_thermostat
-\`\`\`
+```
 
 The **climate entity** now exposes:
 
@@ -247,5 +247,3 @@ If you’re wrestling with a Tuya TS0601 device, start by identifying your **DP 
 *Device:* `_TZE204_xalsoe3m` (Moes ZHT-002)  
 *Home Assistant Core:* 2025.10.4  
 *Integration:* ZHA (Texas Instruments CC2531 coordinator)
-
-
